@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:layout_gravity="center"
+    app:rowCount="1"
+    android:background="@color/black"
+    app:columnCount="4"
+
+
+    app:alignmentMode="alignMargins"
+    app:useDefaultMargins="true">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1">
+
+        <TextView
+            android:id="@+id/tvSkorA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="50sp" /> />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A"
+            android:textSize="50sp"
+            android:textColor="@color/white"/>
+
+        <ImageButton
+            android:id="@+id/buttonSkorUpA"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:src="@drawable/skor_up_a" />
+
+        <ImageButton
+            android:id="@+id/buttonSkorDownA"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:src="@drawable/skor_down_a" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="B"
+            android:textSize="50sp"
+            android:textColor="@color/white"/>
+
+        <ImageButton
+            android:id="@+id/buttonSkorUpB"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:src="@drawable/skor_up_b" />
+
+        <ImageButton
+            android:id="@+id/buttonSkorDownB"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:src="@drawable/skor_down_b" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1">
+
+        <TextView
+            android:id="@+id/tvSkorB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="50sp" />
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+</androidx.gridlayout.widget.GridLayout>
