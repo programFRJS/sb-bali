@@ -1,0 +1,11 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#0000ff" /> <!-- Warna isi oval -->
+
+    <stroke
+        android:width="3dp"
+        android:color="#FFFFFF" /> <!-- Warna border -->
+
+    <!-- Radius sudut -->
+    <corners android:radius="5dp" />
+</shape>
