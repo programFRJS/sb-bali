@@ -1,498 +1,747 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:layout_gravity="center"
-    app:rowCount="4"
-    android:background="@color/black"
-    app:columnCount="5"
-
-
-    app:alignmentMode="alignMargins"
-    app:useDefaultMargins="true">
+    android:fillViewport="true"
+    android:background="#000000">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1">
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvPlayerA1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Player A1"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
 
-        <TextView
-            android:id="@+id/tvPlayerA2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Player A2"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
+    <!-- TextView Atas -->
+    <TextView
+        android:id="@+id/txt_event"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:text=""
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:textColor="#FFFFFF"
         android:gravity="center"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1">
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
 
-        <ImageButton
+        android:paddingBottom="4dp" />
+
+    <TextView
+        android:id="@+id/txt_court"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Court:"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:textColor="#FFFFFF"
+        android:paddingBottom="4dp" />
+
+    <TextView
+        android:id="@+id/txt_tanggal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        android:textSize="25sp"
+        android:textColor="#FFFFFF"
+        android:paddingBottom="8dp" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="PLAYER NAME"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/yellow"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <!-- Kolom 2-6 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="SCORE"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/yellow"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="SET 1"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/yellow"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="SET 2"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/yellow"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="SET 3"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/yellow"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="SERVICE"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/yellow"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+        </TableRow>
+
+        <!-- Baris 1 -->
+        <TableRow>
+
+            <!-- Kolom 1: A1 dan A2 disusun vertikal -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/cell_border">
+
+                <TextView
+                    android:id="@+id/tvPlayerA1"
+                    android:text="PLAYER A1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:padding="4dp"
+                    android:textColor="#db3b46"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tvPlayerA2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PLAYER A2"
+                    android:padding="4dp"
+                    android:textStyle="bold"
+                    android:textColor="#db3b46"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <!-- Kolom 2-6 -->
+            <TextView
+                android:id="@+id/tvSkorA"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#e2c067"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:id="@+id/tvGamePointOneA"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:id="@+id/tvGamePointTwoA"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:id="@+id/tvGamePointThreeA"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:id="@+id/tvServiceA"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+        </TableRow>
+
+        <!-- Baris 2 -->
+        <TableRow>
+
+            <!-- Kolom 1: B1 dan B2 disusun vertikal -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/cell_border">
+
+                <TextView
+                    android:id="@+id/tvPlayerB1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PLAYER B1"
+                    android:padding="4dp"
+                    android:textStyle="bold"
+                    android:textColor="#db3b46"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tvPlayerB2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PLAYER B2"
+                    android:padding="4dp"
+                    android:textStyle="bold"
+                    android:textColor="#db3b46"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <!-- Kolom 2-6 -->
+            <TextView
+                android:id="@+id/tvSkorB"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#e2c067"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:id="@+id/tvGamePointOneB"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:id="@+id/tvGamePointTwoB"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:id="@+id/tvGamePointThreeB"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+
+            <TextView
+                android:id="@+id/tvServiceB"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:background="@drawable/cell_border" />
+        </TableRow>
+    </TableLayout>
+
+
+
+    <!-- GridLayout: 5 kolom, 4 baris, memenuhi sisa layar -->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:columnCount="5"
+        android:rowCount="4"
+        android:layout_marginTop="10dp"
+        android:alignmentMode="alignMargins"
+        android:useDefaultMargins="true"
+        android:background="#000000">
+
+        <!-- Total 20 item -->
+        <!-- Bisa diganti dengan loop di code (RecyclerView), tapi ini versi manual -->
+        <LinearLayout
             android:id="@+id/buttonSkorUpA"
-            android:layout_width="100dp"
-            android:layout_height="70dp"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:src="@drawable/skor_up_a" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buttonBall_A"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:clickable="true"
-        android:background="@drawable/button_selector"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        android:focusable="true">
-
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/tennis_ball"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buttonSet"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:clickable="true"
-        android:background="@drawable/button_selector"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        android:focusable="true">
-
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Set"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="50sp"
-            android:gravity="center" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/skor_up_a"/>
 
-
-
-    <LinearLayout
-        android:id="@+id/buttonReset"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:clickable="true"
-        android:background="@drawable/button_selector"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        android:focusable="true">
-
-        <TextView
-            android:layout_width="wrap_content"
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonSkorUpOneA"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Reset"
-            android:textStyle="bold"
-            android:textColor="@color/yellow"
-            android:textSize="25sp"
-            android:gravity="center" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-        <TextView
-            android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/skor_up_b"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonBall_A"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Press 3x"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:gravity="center" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tennis_ball"/>
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1">
-
-        <TextView
-            android:id="@+id/tvSkorA"
-            android:layout_width="wrap_content"
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonSet"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="00"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="50sp" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1">
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonReset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-        <ImageButton
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset 3x"
+                android:textStyle="bold"
+                android:textColor="@color/yellow"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+
+
+        </LinearLayout>
+        <LinearLayout
             android:id="@+id/buttonSkorDownA"
-            android:layout_width="100dp"
-            android:layout_height="70dp"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:src="@drawable/skor_down_a" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buttonAD_A"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:clickable="true"
-        android:background="@drawable/button_selector"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        android:focusable="true">
-
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="AD"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="50sp"
-            android:gravity="center" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/skor_down_a"/>
 
-    <LinearLayout
-        android:id="@+id/buttonBrightnessUp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:clickable="true"
-        android:background="@drawable/button_selector"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        android:focusable="true">
-
-        <TextView
-            android:layout_width="wrap_content"
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonSkorDownOneA"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="WIN A"
-            android:textStyle="bold"
-            android:layout_marginLeft="20dp"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:gravity="center" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/skor_down_b"/>
 
-            android:scaleType="centerCrop"
-            android:src="@drawable/baseline_arrow_drop_up_orange"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buttonGamePointUp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:clickable="true"
-        android:background="@drawable/button_selector"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        android:focusable="true">
-
-        <TextView
-            android:layout_width="wrap_content"
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonAD_A"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="WIN B"
-            android:textStyle="bold"
-            android:layout_marginLeft="20dp"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:gravity="center" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AD"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center" />
 
-            android:scaleType="centerCrop"
-            android:src="@drawable/baseline_arrow_drop_up_orange"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1">
-
-        <TextView
-            android:id="@+id/tvPlayerB1"
-            android:layout_width="wrap_content"
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonBrightnessUp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Player B1"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-        <TextView
-            android:id="@+id/tvPlayerB2"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WIN A"
+                android:textStyle="bold"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+
+                android:scaleType="centerCrop"
+                android:src="@drawable/baseline_arrow_drop_up_orange"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonBrightnessDown"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Player B2"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WIN A"
+                android:textStyle="bold"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
 
-        <ImageButton
+                android:scaleType="centerCrop"
+                android:src="@drawable/baseline_arrow_drop_down_24_orange"/>
+
+        </LinearLayout>
+        <LinearLayout
             android:id="@+id/buttonSkorUpB"
-            android:layout_width="100dp"
-            android:layout_height="70dp"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:src="@drawable/skor_up_b" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buttonBall_B"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:clickable="true"
-        android:background="@drawable/button_selector"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        android:focusable="true">
-
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/tennis_ball"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buttonBrightnessDown"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:clickable="true"
-        android:background="@drawable/button_selector"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        android:focusable="true">
-
-<!--        <ImageView-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_marginLeft="20dp"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:src="@drawable/baseline_brightness_medium_24"/>-->
-
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="WIN A"
-            android:textStyle="bold"
-            android:layout_marginLeft="20dp"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:gravity="center" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/baseline_arrow_drop_down_24_orange"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/skor_up_a"/>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buttonGamePointDown"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:clickable="true"
-        android:background="@drawable/button_selector"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        android:focusable="true">
-
-        <TextView
-            android:layout_width="wrap_content"
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonSkorUpOneB"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="WIN B"
-            android:textStyle="bold"
-            android:layout_marginLeft="20dp"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:gravity="center" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/baseline_arrow_drop_down_24_orange"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/skor_up_b"/>
 
-
-
-    </LinearLayout>
-
-
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1">
-
-        <TextView
-            android:id="@+id/tvSkorB"
-            android:layout_width="wrap_content"
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonBall_B"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="00"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="50sp" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tennis_ball"/>
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1">
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonGamePointUp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-        <ImageButton
+            <!--        <ImageView-->
+            <!--            android:layout_width="50dp"-->
+            <!--            android:layout_height="50dp"-->
+            <!--            android:layout_marginLeft="20dp"-->
+            <!--            android:scaleType="centerCrop"-->
+            <!--            android:src="@drawable/baseline_brightness_medium_24"/>-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WIN B"
+                android:textStyle="bold"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/baseline_arrow_drop_up_orange"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonGamePointDown"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WIN B"
+                android:textStyle="bold"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/baseline_arrow_drop_down_24_orange"/>
+
+
+
+        </LinearLayout>
+        <LinearLayout
             android:id="@+id/buttonSkorDownB"
-            android:layout_width="100dp"
-            android:layout_height="70dp"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:src="@drawable/skor_down_b" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buttonAD_B"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:clickable="true"
-        android:background="@drawable/button_selector"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        android:focusable="true">
-
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="AD"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="50sp"
-            android:gravity="center" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/skor_down_a"/>
 
-    <LinearLayout
-        android:id="@+id/enterTeamButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:clickable="true"
-        android:background="@drawable/button_selector"
-        app:layout_columnWeight="1"
-        app:layout_rowWeight="1"
-        app:layout_columnSpan="2"
-        android:focusable="true">
-
-        <TextView
-            android:layout_width="wrap_content"
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonSkorDownOneB"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Enter Player"
-            android:textStyle="bold"
-            android:textColor="@color/yellow"
-            android:textSize="35sp"
-            android:gravity="center" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/skor_down_b"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/buttonAD_B"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AD"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/enterTeamButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_columnSpan="2"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter Player"
+                android:textStyle="bold"
+                android:textColor="@color/yellow"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+        </LinearLayout>
+<!--        <TextView android:text="20" android:gravity="center" android:layout_width="0dp" android:layout_height="0dp" android:layout_columnWeight="1" android:layout_rowWeight="1" android:background="#DDD" />-->
+    </GridLayout>
     </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</androidx.gridlayout.widget.GridLayout>
+</ScrollView>

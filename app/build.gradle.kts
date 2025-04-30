@@ -52,7 +52,7 @@ dependencies {
 
     // OkHttp Logging Interceptor (opsional, untuk debugging)
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
-    implementation("androidx.gridlayout:gridlayout:1.0.0")
+//    implementation("androidx.gridlayout:gridlayout:1.0.0")
 
     // Gson Converter untuk Retrofit
 

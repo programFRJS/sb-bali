@@ -2,11 +2,17 @@ package com.baliproject.scoreboardtennis
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ImageSpan
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.baliproject.scoreboardtennis.databinding.ActivityMainBinding
+import com.google.android.material.internal.ViewUtils.dpToPx
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,16 +49,62 @@ class MainActivity : AppCompatActivity() {
         val playerB1 = intent.getStringExtra("playerB1")
         val playerB2 = intent.getStringExtra("playerB2")
 
-        binding.tvPlayerA1.text = formatPlayerNameA1(playerA1)
-        binding.tvPlayerA2.text = formatPlayerNameA2(playerA2)
-        binding.tvPlayerB1.text = formatPlayerNameB1(playerB1)
-        binding.tvPlayerB2.text = formatPlayerNameB2(playerB2)
+        if(Set == 1) {
+            binding.tvGamePointOneA.setTextColor(ContextCompat.getColor(this, R.color.green))
+            binding.tvGamePointOneB.setTextColor(ContextCompat.getColor(this, R.color.green))
+        }
+        if(Set == 2){
+            binding.tvGamePointTwoA.setTextColor(ContextCompat.getColor(this, R.color.green))
+            binding.tvGamePointTwoB.setTextColor(ContextCompat.getColor(this, R.color.green))
+        }
+        if(Set == 3){
+            binding.tvGamePointThreeA.setTextColor(ContextCompat.getColor(this, R.color.green))
+            binding.tvGamePointThreeB.setTextColor(ContextCompat.getColor(this, R.color.green))
+        }
+
+
+
+        val txtEvent = findViewById<TextView>(R.id.txt_event)
+        val txtCourt = findViewById<TextView>(R.id.txt_court)
+        val txtTanggal = findViewById<TextView>(R.id.txt_tanggal)
+
+        val sharedPref = getSharedPreferences("MyAppData", MODE_PRIVATE)
+        val eventName = sharedPref.getString("event", "")
+        val court = sharedPref.getString("court", "")
+        val date = sharedPref.getString("date", "")
+
+        txtEvent.text = "$eventName"
+//        txtEvent.isSelected = true
+        txtCourt.text = "Court: $court"
+        txtTanggal.text = "$date"
 
         binding.buttonSet.setOnClickListener{
             Set += 1
             reset = 0
             if (Set >= 4) {
                 Set = 1
+            }
+
+            if(Set == 1) {
+                binding.tvGamePointOneA.setTextColor(ContextCompat.getColor(this, R.color.green))
+                binding.tvGamePointOneB.setTextColor(ContextCompat.getColor(this, R.color.green))
+            } else {
+                binding.tvGamePointOneA.setTextColor(ContextCompat.getColor(this, R.color.white))
+                binding.tvGamePointOneB.setTextColor(ContextCompat.getColor(this, R.color.white))
+            }
+            if(Set == 2){
+                binding.tvGamePointTwoA.setTextColor(ContextCompat.getColor(this, R.color.green))
+                binding.tvGamePointTwoB.setTextColor(ContextCompat.getColor(this, R.color.green))
+            } else {
+                binding.tvGamePointTwoA.setTextColor(ContextCompat.getColor(this, R.color.white))
+                binding.tvGamePointTwoB.setTextColor(ContextCompat.getColor(this, R.color.white))
+            }
+            if(Set == 3){
+                binding.tvGamePointThreeA.setTextColor(ContextCompat.getColor(this, R.color.green))
+                binding.tvGamePointThreeB.setTextColor(ContextCompat.getColor(this, R.color.green))
+            }else{
+                binding.tvGamePointThreeA.setTextColor(ContextCompat.getColor(this, R.color.white))
+                binding.tvGamePointThreeB.setTextColor(ContextCompat.getColor(this, R.color.white))
             }
             sendSetToESP32()
         }
@@ -64,18 +116,21 @@ class MainActivity : AppCompatActivity() {
                 if(set1B > 9) {
                     set1B = 0
                 }
+                binding.tvGamePointOneB.text = set1B.toString()
             } else if (Set == 2) {
                 set2B++
                 reset = 0
                 if(set2B > 9){
                     set2B = 0
                 }
+                binding.tvGamePointTwoB.text = set2B.toString()
             } else if (Set == 3) {
                 set3B++
                 reset = 0
                 if(set3B > 9){
                     set3B = 0
                 }
+                binding.tvGamePointThreeB.text = set3B.toString()
             }
 
             sendSetToESP32()
@@ -88,34 +143,53 @@ class MainActivity : AppCompatActivity() {
                 if(set1B < 0) {
                     set1B = 0
                 }
+                binding.tvGamePointOneB.text = set1B.toString()
             } else if (Set == 2) {
                 set2B--
                 reset = 0
                 if(set2B < 0){
                     set2B = 0
                 }
+                binding.tvGamePointTwoB.text = set2B.toString()
             } else if (Set == 3) {
                 set3B--
                 reset = 0
                 if(set3B < 0 ){
                     set3B = 0
                 }
+                binding.tvGamePointThreeB.text = set3B.toString()
             }
 
             sendSetToESP32()
         }
 
-        binding.buttonBallA.setOnClickListener{
+        binding.buttonBallA.setOnClickListener {
             serviceA++
             reset = 0
             serviceB = 0
             advantageA = 0
             advantageB = 0
-            if (serviceA == 2) {
+            binding.tvServiceB.text = ""
+            if (serviceA == 1) {
+                val drawable = ContextCompat.getDrawable(this, R.drawable.tennis_ball)
+                drawable?.setBounds(0, 0, dpToPx(30), dpToPx(30)) // Ukuran 30dp
+
+                val span = SpannableString(" ")
+                drawable?.let {
+                    val imageSpan = ImageSpan(it, ImageSpan.ALIGN_BOTTOM)
+                    span.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+
+                binding.tvServiceA.text = span
+                binding.tvServiceB.text = ""
+            } else if (serviceA == 2) {
                 serviceA = 0
+                binding.tvServiceA.text = ""
             }
+
             sendServiceToESP32()
         }
+
 
         binding.buttonBallB.setOnClickListener{
             serviceB++
@@ -123,8 +197,21 @@ class MainActivity : AppCompatActivity() {
             serviceA = 0
             advantageA = 0
             advantageB = 0
-            if (serviceB == 2) {
+            binding.tvServiceA.text = ""
+            if (serviceB == 1) {
+                val drawable = ContextCompat.getDrawable(this, R.drawable.tennis_ball)
+                drawable?.setBounds(0, 0, dpToPx(30), dpToPx(30)) // Ukuran 30dp
+
+                val span = SpannableString(" ")
+                drawable?.let {
+                    val imageSpan = ImageSpan(it, ImageSpan.ALIGN_BOTTOM)
+                    span.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+
+                binding.tvServiceB.text = span
+            } else if (serviceB == 2) {
                 serviceB = 0
+                binding.tvServiceB.text = ""
             }
             sendServiceToESP32()
         }
@@ -135,8 +222,11 @@ class MainActivity : AppCompatActivity() {
             advantageB = 0
             serviceA = 0
             serviceB = 0
+            binding.tvServiceA.text = "AD"
+            binding.tvServiceB.text = ""
             if (advantageA == 2) {
                 advantageA = 0
+                binding.tvServiceA.text = ""
             }
             sendServiceToESP32()
         }
@@ -147,15 +237,19 @@ class MainActivity : AppCompatActivity() {
             advantageA = 0
             serviceA = 0
             serviceB = 0
+            binding.tvServiceB.text = "AD"
+            binding.tvServiceA.text = ""
             if (advantageB == 2) {
                 advantageB = 0
+                binding.tvServiceB.text = ""
             }
+
             sendServiceToESP32()
         }
 
         binding.enterTeamButton.setOnClickListener {
             val intent = Intent(this, TimActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, 100)
         }
 
         binding.buttonBrightnessUp.setOnClickListener {
@@ -165,18 +259,21 @@ class MainActivity : AppCompatActivity() {
                 if(set1A > 9) {
                     set1A = 0
                 }
+                binding.tvGamePointOneA.text = set1A.toString()
             } else if (Set == 2) {
                 set2A++
                 reset = 0
                 if(set2A > 9) {
                     set2A = 0
                 }
+                binding.tvGamePointTwoA.text = set2A.toString()
             } else if (Set == 3) {
                 set3A++
                 reset = 0
                 if(set3A > 9) {
                     set3A = 0
                 }
+                binding.tvGamePointThreeA.text = set3A.toString()
             }
             sendSetToESP32()
 //            persen += 10
@@ -195,18 +292,21 @@ class MainActivity : AppCompatActivity() {
                 if(set1A < 0){
                     set1A = 0
                 }
+                binding.tvGamePointOneA.text = set1A.toString()
             } else if (Set == 2) {
                 set2A--
                 reset = 0
                 if(set2A < 0){
                     set2A = 0
                 }
+                binding.tvGamePointTwoA.text = set2A.toString()
             } else if (Set == 3) {
                 set3A--
                 reset = 0
                 if(set3A < 0){
                     set3A = 0
                 }
+                binding.tvGamePointThreeA.text = set3A.toString()
             }
 
             sendSetToESP32()
@@ -230,7 +330,63 @@ class MainActivity : AppCompatActivity() {
 
             binding.tvSkorA.text = scoreA.toString()
 
-            changeButtonOpacity(binding.buttonSkorUpA)
+
+            sendScoresToESP32()
+        }
+
+        binding.buttonSkorUpOneA.setOnClickListener {
+            reset = 0
+            scoreA++
+
+            if (scoreA > 99) {
+                scoreA = 0
+            }
+
+            binding.tvSkorA.text = scoreA.toString()
+
+
+            sendScoresToESP32()
+        }
+
+        binding.buttonSkorDownOneA.setOnClickListener {
+            reset = 0
+            scoreA--
+
+            if (scoreA <= 0) {
+                scoreA = 0
+            }
+
+            binding.tvSkorA.text = scoreA.toString()
+
+
+            sendScoresToESP32()
+        }
+
+        binding.buttonSkorUpOneB.setOnClickListener {
+            reset = 0
+            scoreB++
+
+            if (scoreB > 99) {
+                scoreB = 0
+            }
+
+            binding.tvSkorB.text = scoreB.toString()
+
+
+            sendScoresToESP32()
+        }
+
+        binding.buttonSkorDownOneB.setOnClickListener {
+            reset = 0
+            scoreB--
+
+            if (scoreB <= 0) {
+                scoreB = 0
+            }
+
+            binding.tvSkorB.text = scoreB.toString()
+
+
             sendScoresToESP32()
         }
 
@@ -245,7 +401,7 @@ class MainActivity : AppCompatActivity() {
 
             binding.tvSkorA.text = scoreA.toString()
 
-            changeButtonOpacity(binding.buttonSkorDownA)
+
             sendScoresToESP32()
         }
 
@@ -260,7 +416,7 @@ class MainActivity : AppCompatActivity() {
 
             binding.tvSkorB.text = scoreB.toString()
 
-            changeButtonOpacity(binding.buttonSkorUpB)
+
             sendScoresToESP32()
         }
 
@@ -275,13 +431,14 @@ class MainActivity : AppCompatActivity() {
 
             binding.tvSkorB.text = scoreB.toString()
 
-            changeButtonOpacity(binding.buttonSkorDownB)
+
             sendScoresToESP32()
         }
 
         binding.buttonReset.setOnClickListener {
             pressReset++
             if(pressReset == 3){
+                pressReset = 0
                 scoreA = 0
                 scoreB = 0
                 Set = 1
@@ -296,8 +453,40 @@ class MainActivity : AppCompatActivity() {
                 advantageA = 0
                 advantageB = 0
                 reset = 0
+                binding.tvSkorA.text = scoreA.toString()
+                binding.tvSkorB.text = scoreB.toString()
+                binding.tvServiceA.text = ""
+                binding.tvServiceB.text = ""
+                binding.tvGamePointOneA.setTextColor(ContextCompat.getColor(this, R.color.green))
+                binding.tvGamePointOneB.setTextColor(ContextCompat.getColor(this, R.color.green))
+                binding.tvGamePointTwoA.setTextColor(ContextCompat.getColor(this, R.color.white))
+                binding.tvGamePointTwoB.setTextColor(ContextCompat.getColor(this, R.color.white))
+                binding.tvGamePointThreeA.setTextColor(ContextCompat.getColor(this, R.color.white))
+                binding.tvGamePointThreeB.setTextColor(ContextCompat.getColor(this, R.color.white))
+                binding.tvGamePointOneA.text = set1A.toString()
+                binding.tvGamePointTwoA.text = set2A.toString()
+                binding.tvGamePointThreeA.text = set3A.toString()
+                binding.tvGamePointOneB.text = set1B.toString()
+                binding.tvGamePointTwoB.text = set2B.toString()
+                binding.tvGamePointThreeB.text = set3B.toString()
                 sendResetToESP32()
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            val playerA1 = data.getStringExtra("playerA1")
+            val playerA2 = data.getStringExtra("playerA2")
+            val playerB1 = data.getStringExtra("playerB1")
+            val playerB2 = data.getStringExtra("playerB2")
+
+            binding.tvPlayerA1.text = formatPlayerNameA1(playerA1)
+            binding.tvPlayerA2.text = formatPlayerNameA2(playerA2)
+            binding.tvPlayerB1.text = formatPlayerNameB1(playerB1)
+            binding.tvPlayerB2.text = formatPlayerNameB2(playerB2)
         }
     }
 
@@ -309,34 +498,34 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun formatPlayerNameA1(playerNameA1: String?): String {
-        return if (playerNameA1 != null && playerNameA1.length > 7) {
-            playerNameA1.substring(0, 5) + ".."
+        return if (playerNameA1 != null && playerNameA1.length > 11) {
+            playerNameA1.substring(0, 11) + ".."
         } else {
-            playerNameA1 ?: "Player A1"
+            playerNameA1 ?: "PLAYER A1"
         }
     }
 
     private fun formatPlayerNameA2(playerNameA2: String?): String {
-        return if (playerNameA2 != null && playerNameA2.length > 7) {
-            playerNameA2.substring(0, 5) + ".."
+        return if (playerNameA2 != null && playerNameA2.length > 11) {
+            playerNameA2.substring(0, 11) + ".."
         } else {
-            playerNameA2 ?: "Player A2"
+            playerNameA2 ?: "PLAYER A2"
         }
     }
 
     private fun formatPlayerNameB1(playerNameB1: String?): String {
-        return if (playerNameB1 != null && playerNameB1.length > 7) {
-            playerNameB1.substring(0, 5) + ".."
+        return if (playerNameB1 != null && playerNameB1.length > 11) {
+            playerNameB1.substring(0, 11) + ".."
         } else {
-            playerNameB1 ?: "Player B1"
+            playerNameB1 ?: "PLAYER B1"
         }
     }
 
     private fun formatPlayerNameB2(playerNameB2: String?): String {
-        return if (playerNameB2 != null && playerNameB2.length > 7) {
-            playerNameB2.substring(0, 5) + ".."
+        return if (playerNameB2 != null && playerNameB2.length > 11) {
+            playerNameB2.substring(0, 11) + ".."
         } else {
-            playerNameB2 ?: "Player B2"
+            playerNameB2 ?: "PLAYER B2"
         }
     }
 
@@ -386,6 +575,10 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return (dp * resources.displayMetrics.density).toInt()
     }
 
     private fun sendSetToESP32(){

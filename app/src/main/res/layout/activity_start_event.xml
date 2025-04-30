@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".StartEventActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/scanAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/scan_menu_appbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="Input Event"
+            app:titleTextColor="@color/white"
+            app:titleCentered="true" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Event Name -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputEvent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Event Name"
+        app:startIconDrawable="@drawable/baseline_emoji_events_24"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:layout_constraintTop_toBottomOf="@id/scanAppBarLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/eventNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textColor="@android:color/black"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Court -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputCourt"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Court"
+        app:startIconDrawable="@drawable/baseline_aspect_ratio_24"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:layout_constraintTop_toBottomOf="@id/inputEvent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/court_EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:textColor="@android:color/black" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Date -->
+    <!-- Date Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonPickDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/black"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:cornerRadius="20dp"
+        app:icon="@drawable/baseline_calendar_month_24"
+        app:iconPadding="8dp"
+        app:iconGravity="textStart"
+        app:layout_constraintTop_toBottomOf="@id/inputCourt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+    <!-- Submit Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonSubmitEvent"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="SUBMIT"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:backgroundTint="@color/black"
+        app:cornerRadius="20dp"
+        app:layout_constraintTop_toBottomOf="@id/buttonPickDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

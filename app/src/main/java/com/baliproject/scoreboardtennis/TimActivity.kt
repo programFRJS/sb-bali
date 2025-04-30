@@ -39,7 +39,7 @@ class TimActivity : AppCompatActivity() {
         setPlayerInputWatcher(binding.playerA2EditText)
         setPlayerInputWatcher(binding.playerB2EditText)
 
-        val maxLengthFilter = InputFilter.LengthFilter(10)
+        val maxLengthFilter = InputFilter.LengthFilter(11)
         binding.playerA1EditText.filters = arrayOf(maxLengthFilter)
         binding.playerB1EditText.filters = arrayOf(maxLengthFilter)
         binding.playerA2EditText.filters = arrayOf(maxLengthFilter)
@@ -51,20 +51,25 @@ class TimActivity : AppCompatActivity() {
             val playerB1 = binding.playerB1EditText.text.toString()
             val playerB2 = binding.playerB2EditText.text.toString()
 
-            val intent = Intent(this@TimActivity, MainActivity::class.java)
-            intent.putExtra("playerA1", playerA1)
-            intent.putExtra("playerA2", playerA2)
-            intent.putExtra("playerB1", playerB1)
-            intent.putExtra("playerB2", playerB2)
-
             if (isValidInput()) {
-                Toast.makeText(this, "Input Valid", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Player Name Added", Toast.LENGTH_SHORT).show()
                 sendPlayerToESP32(playerA1, playerA2, playerB1, playerB2)
-                startActivity(intent)
+
+                // Set result untuk kirim data kembali ke MainActivity
+                val resultIntent = Intent()
+                resultIntent.putExtra("playerA1", playerA1)
+                resultIntent.putExtra("playerA2", playerA2)
+                resultIntent.putExtra("playerB1", playerB1)
+                resultIntent.putExtra("playerB2", playerB2)
+                setResult(RESULT_OK, resultIntent)
+
+                // Tutup activity dan kembali ke MainActivity yang lama
+                finish()
             } else {
-                Toast.makeText(this, "Input Tidak Valid", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Input Player Not Valid", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     private fun setPlayerInputWatcher(editText: TextInputEditText) {
@@ -90,28 +95,28 @@ class TimActivity : AppCompatActivity() {
         var isValid = true
 
         if (isEmpty(binding.playerA1EditText)) {
-            setError(binding.inputPlayerA1, "Player A1 harus diisi")
+            setError(binding.inputPlayerA1, "Player A1 cannot be blank")
             isValid = false
         } else {
             clearError(binding.inputPlayerA1)
         }
 
         if (isEmpty(binding.playerB1EditText)) {
-            setError(binding.inputPlayerB1, "Player B1 harus diisi")
+            setError(binding.inputPlayerB1, "Player B1 cannot be blank")
             isValid = false
         } else {
             clearError(binding.inputPlayerB1)
         }
 
         if (isEmpty(binding.playerA2EditText)) {
-            setError(binding.inputPlayerA2, "Player A2 harus diisi")
+            setError(binding.inputPlayerA2, "Player A2 cannot be blank")
             isValid = false
         } else {
             clearError(binding.inputPlayerA2)
         }
 
         if (isEmpty(binding.playerB2EditText)) {
-            setError(binding.inputPlayerB2, "Player B2 harus diisi")
+            setError(binding.inputPlayerB2, "Player B2 cannot be blank")
             isValid = false
         } else {
             clearError(binding.inputPlayerB2)
