@@ -1,5 +1,7 @@
-package com.baliproject.scoreboardtennis
+package com.baliproject.scoreboardtennis.UI.Activity
 
+import SetPlayerRequest
+import SetPlayerResponse
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -8,11 +10,12 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.baliproject.scoreboardtennis.databinding.ActivityMainBinding
+import com.baliproject.scoreboardtennis.API.ApiConfig
+import com.baliproject.scoreboardtennis.API.ApiService
+import com.baliproject.scoreboardtennis.API.ResponseData
+import com.baliproject.scoreboardtennis.R
+import com.baliproject.scoreboardtennis.API.RetrofitClient
 import com.baliproject.scoreboardtennis.databinding.ActivityTimBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
@@ -55,20 +58,47 @@ class TimActivity : AppCompatActivity() {
                 Toast.makeText(this, "Player Name Added", Toast.LENGTH_SHORT).show()
                 sendPlayerToESP32(playerA1, playerA2, playerB1, playerB2)
 
-                // Set result untuk kirim data kembali ke MainActivity
-                val resultIntent = Intent()
-                resultIntent.putExtra("playerA1", playerA1)
-                resultIntent.putExtra("playerA2", playerA2)
-                resultIntent.putExtra("playerB1", playerB1)
-                resultIntent.putExtra("playerB2", playerB2)
+                // Kirim ke MainActivity
+                val resultIntent = Intent().apply {
+                    putExtra("playerA1", playerA1)
+                    putExtra("playerA2", playerA2)
+                    putExtra("playerB1", playerB1)
+                    putExtra("playerB2", playerB2)
+                }
                 setResult(RESULT_OK, resultIntent)
 
-                // Tutup activity dan kembali ke MainActivity yang lama
-                finish()
+                // Ambil slug dari Intent
+                val slug = intent.getStringExtra("slug")
+                if (!slug.isNullOrEmpty()) {
+                    val request = SetPlayerRequest(
+                        playerA = listOf(playerA1, playerA2),
+                        playerB = listOf(playerB1, playerB2)
+                    )
+
+                    val apiService = ApiConfig.getApiService()
+                    apiService.setPlayerNames(slug, request)
+                        .enqueue(object : Callback<SetPlayerResponse> {
+                            override fun onResponse(call: Call<SetPlayerResponse>, response: Response<SetPlayerResponse>) {
+                                if (response.isSuccessful && response.body()?.success == true) {
+                                    Toast.makeText(this@TimActivity, "Nama pemain berhasil disimpan", Toast.LENGTH_SHORT).show()
+                                    finish()
+                                } else {
+                                    Toast.makeText(this@TimActivity, "Gagal simpan: ${response.body()?.message ?: "Unknown error"}", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<SetPlayerResponse>, t: Throwable) {
+                                Toast.makeText(this@TimActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                } else {
+                    Toast.makeText(this, "Slug tidak ditemukan", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 Toast.makeText(this, "Input Player Not Valid", Toast.LENGTH_SHORT).show()
             }
         }
+
 
     }
 

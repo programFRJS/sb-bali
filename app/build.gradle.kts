@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp") version "2.0.0-1.0.22"
 }
 
 android {
@@ -39,6 +40,7 @@ android {
 }
 
 dependencies {
+    val room_version = "2.7.1"
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -52,7 +54,15 @@ dependencies {
 
     // OkHttp Logging Interceptor (opsional, untuk debugging)
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
 //    implementation("androidx.gridlayout:gridlayout:1.0.0")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+
+// Kotlin Extensions and Coroutines support
+
+
 
     // Gson Converter untuk Retrofit
 

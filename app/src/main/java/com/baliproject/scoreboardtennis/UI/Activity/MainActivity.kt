@@ -1,4 +1,4 @@
-package com.baliproject.scoreboardtennis
+package com.baliproject.scoreboardtennis.UI.Activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,8 +11,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.baliproject.scoreboardtennis.API.ApiConfig
+import com.baliproject.scoreboardtennis.API.ApiService
+import com.baliproject.scoreboardtennis.API.ResetGame.ResetGameResponse
+import com.baliproject.scoreboardtennis.API.ResponseData
+import com.baliproject.scoreboardtennis.R
+import com.baliproject.scoreboardtennis.API.RetrofitClient
+import com.baliproject.scoreboardtennis.API.Score.SetScoreResponse
+import com.baliproject.scoreboardtennis.API.SetAdvantage.SetAdvantageResetResponse
+import com.baliproject.scoreboardtennis.API.SetAdvantage.SetAdvantageResponse
+import com.baliproject.scoreboardtennis.API.SetService.SetServiceResetResponse
+import com.baliproject.scoreboardtennis.API.SetService.SetServiceResponse
+import com.baliproject.scoreboardtennis.API.UpdateSetScore.UpdateSetScoreResponse
 import com.baliproject.scoreboardtennis.databinding.ActivityMainBinding
-import com.google.android.material.internal.ViewUtils.dpToPx
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     private var advantageB = 0
     private var reset = 0
     private var pressReset = 0
-
+    private lateinit var slug: String
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +54,11 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Inisialisasi Retrofit dengan IP dari Room
+//        lifecycleScope.launch {
+//            RetrofitClient.init(this@MainActivity)
+//        }
 
         val playerA1 = intent.getStringExtra("playerA1")
         val playerA2 = intent.getStringExtra("playerA2")
@@ -72,11 +88,18 @@ class MainActivity : AppCompatActivity() {
         val eventName = sharedPref.getString("event", "")
         val court = sharedPref.getString("court", "")
         val date = sharedPref.getString("date", "")
+        slug = intent.getStringExtra("slug") ?: ""
 
         txtEvent.text = "$eventName"
 //        txtEvent.isSelected = true
         txtCourt.text = "Court: $court"
         txtTanggal.text = "$date"
+
+        binding.buttonToSetting.setOnClickListener {
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
+        }
+
 
         binding.buttonSet.setOnClickListener{
             Set += 1
@@ -107,6 +130,7 @@ class MainActivity : AppCompatActivity() {
                 binding.tvGamePointThreeB.setTextColor(ContextCompat.getColor(this, R.color.white))
             }
             sendSetToESP32()
+
         }
 
         binding.buttonGamePointUp.setOnClickListener {
@@ -117,6 +141,7 @@ class MainActivity : AppCompatActivity() {
                     set1B = 0
                 }
                 binding.tvGamePointOneB.text = set1B.toString()
+                sendSetScoreToServer("b", 1, set1B)
             } else if (Set == 2) {
                 set2B++
                 reset = 0
@@ -124,6 +149,7 @@ class MainActivity : AppCompatActivity() {
                     set2B = 0
                 }
                 binding.tvGamePointTwoB.text = set2B.toString()
+                sendSetScoreToServer("b", 2, set2B)
             } else if (Set == 3) {
                 set3B++
                 reset = 0
@@ -131,6 +157,7 @@ class MainActivity : AppCompatActivity() {
                     set3B = 0
                 }
                 binding.tvGamePointThreeB.text = set3B.toString()
+                sendSetScoreToServer("b", 3, set3B)
             }
 
             sendSetToESP32()
@@ -144,6 +171,7 @@ class MainActivity : AppCompatActivity() {
                     set1B = 0
                 }
                 binding.tvGamePointOneB.text = set1B.toString()
+                sendSetScoreToServer("b", 1, set1B)
             } else if (Set == 2) {
                 set2B--
                 reset = 0
@@ -151,6 +179,7 @@ class MainActivity : AppCompatActivity() {
                     set2B = 0
                 }
                 binding.tvGamePointTwoB.text = set2B.toString()
+                sendSetScoreToServer("b", 2, set2B)
             } else if (Set == 3) {
                 set3B--
                 reset = 0
@@ -158,6 +187,7 @@ class MainActivity : AppCompatActivity() {
                     set3B = 0
                 }
                 binding.tvGamePointThreeB.text = set3B.toString()
+                sendSetScoreToServer("b", 3, set3B)
             }
 
             sendSetToESP32()
@@ -182,9 +212,12 @@ class MainActivity : AppCompatActivity() {
 
                 binding.tvServiceA.text = span
                 binding.tvServiceB.text = ""
+                sendServiceToServer("a")
+                resetAdvantageToServer()
             } else if (serviceA == 2) {
                 serviceA = 0
                 binding.tvServiceA.text = ""
+                resetServiceToServer()
             }
 
             sendServiceToESP32()
@@ -209,9 +242,12 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 binding.tvServiceB.text = span
+                sendServiceToServer("b")
+                resetAdvantageToServer()
             } else if (serviceB == 2) {
                 serviceB = 0
                 binding.tvServiceB.text = ""
+                resetServiceToServer()
             }
             sendServiceToESP32()
         }
@@ -227,8 +263,11 @@ class MainActivity : AppCompatActivity() {
             if (advantageA == 2) {
                 advantageA = 0
                 binding.tvServiceA.text = ""
+                resetAdvantageToServer()
             }
             sendServiceToESP32()
+            sendAdvantageToServer("a")
+            resetServiceToServer()
         }
 
         binding.buttonADB.setOnClickListener {
@@ -242,13 +281,16 @@ class MainActivity : AppCompatActivity() {
             if (advantageB == 2) {
                 advantageB = 0
                 binding.tvServiceB.text = ""
+                resetAdvantageToServer()
             }
-
             sendServiceToESP32()
+            sendAdvantageToServer("b")
+            resetServiceToServer()
         }
 
         binding.enterTeamButton.setOnClickListener {
             val intent = Intent(this, TimActivity::class.java)
+            intent.putExtra("slug", slug) // kirim slug yang kamu terima sebelumnya
             startActivityForResult(intent, 100)
         }
 
@@ -260,6 +302,7 @@ class MainActivity : AppCompatActivity() {
                     set1A = 0
                 }
                 binding.tvGamePointOneA.text = set1A.toString()
+                sendSetScoreToServer("a", 1, set1A)
             } else if (Set == 2) {
                 set2A++
                 reset = 0
@@ -267,6 +310,7 @@ class MainActivity : AppCompatActivity() {
                     set2A = 0
                 }
                 binding.tvGamePointTwoA.text = set2A.toString()
+                sendSetScoreToServer("a", 2, set2A)
             } else if (Set == 3) {
                 set3A++
                 reset = 0
@@ -274,15 +318,9 @@ class MainActivity : AppCompatActivity() {
                     set3A = 0
                 }
                 binding.tvGamePointThreeA.text = set3A.toString()
+                sendSetScoreToServer("a", 3, set3A)
             }
             sendSetToESP32()
-//            persen += 10
-//
-//            if (persen > 100) {
-//                persen = 100
-//            }
-//
-//            sendBrightnessToESP32()
         }
 
         binding.buttonBrightnessDown.setOnClickListener {
@@ -293,6 +331,7 @@ class MainActivity : AppCompatActivity() {
                     set1A = 0
                 }
                 binding.tvGamePointOneA.text = set1A.toString()
+                sendSetScoreToServer("a", 1, set1A)
             } else if (Set == 2) {
                 set2A--
                 reset = 0
@@ -300,6 +339,7 @@ class MainActivity : AppCompatActivity() {
                     set2A = 0
                 }
                 binding.tvGamePointTwoA.text = set2A.toString()
+                sendSetScoreToServer("a", 2, set2A)
             } else if (Set == 3) {
                 set3A--
                 reset = 0
@@ -307,16 +347,10 @@ class MainActivity : AppCompatActivity() {
                     set3A = 0
                 }
                 binding.tvGamePointThreeA.text = set3A.toString()
+                sendSetScoreToServer("a", 3, set3A)
             }
 
             sendSetToESP32()
-            //ini diubah
-//            persen -= 10
-//            if (persen > 0) {
-//                persen -= 10
-//            }
-//
-//            sendBrightnessToESP32()
         }
 
         binding.buttonSkorUpA.setOnClickListener {
@@ -327,12 +361,11 @@ class MainActivity : AppCompatActivity() {
                 30 -> scoreA += 10
                 40 -> {}
             }
-
             binding.tvSkorA.text = scoreA.toString()
-
-
             sendScoresToESP32()
+            sendScoreToServer("a", scoreA)
         }
+
 
         binding.buttonSkorUpOneA.setOnClickListener {
             reset = 0
@@ -346,6 +379,7 @@ class MainActivity : AppCompatActivity() {
 
 
             sendScoresToESP32()
+            sendScoreToServer("a", scoreA)
         }
 
         binding.buttonSkorDownOneA.setOnClickListener {
@@ -360,6 +394,7 @@ class MainActivity : AppCompatActivity() {
 
 
             sendScoresToESP32()
+            sendScoreToServer("a", scoreA)
         }
 
         binding.buttonSkorUpOneB.setOnClickListener {
@@ -374,6 +409,7 @@ class MainActivity : AppCompatActivity() {
 
 
             sendScoresToESP32()
+            sendScoreToServer("b", scoreB)
         }
 
         binding.buttonSkorDownOneB.setOnClickListener {
@@ -388,6 +424,7 @@ class MainActivity : AppCompatActivity() {
 
 
             sendScoresToESP32()
+            sendScoreToServer("b", scoreB)
         }
 
         binding.buttonSkorDownA.setOnClickListener {
@@ -403,6 +440,7 @@ class MainActivity : AppCompatActivity() {
 
 
             sendScoresToESP32()
+            sendScoreToServer("a", scoreA)
         }
 
         binding.buttonSkorUpB.setOnClickListener {
@@ -418,6 +456,7 @@ class MainActivity : AppCompatActivity() {
 
 
             sendScoresToESP32()
+            sendScoreToServer("b", scoreB)
         }
 
         binding.buttonSkorDownB.setOnClickListener {
@@ -433,6 +472,7 @@ class MainActivity : AppCompatActivity() {
 
 
             sendScoresToESP32()
+            sendScoreToServer("b", scoreB)
         }
 
         binding.buttonReset.setOnClickListener {
@@ -470,6 +510,7 @@ class MainActivity : AppCompatActivity() {
                 binding.tvGamePointTwoB.text = set2B.toString()
                 binding.tvGamePointThreeB.text = set3B.toString()
                 sendResetToESP32()
+                resetToServer()
             }
         }
     }
@@ -651,6 +692,63 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun sendScoreToServer(player: String, score: Int) {
+        val apiService = ApiConfig.getApiService()
+
+        apiService.setScore(slug, player, score).enqueue(object : Callback<SetScoreResponse> {
+            override fun onResponse(call: Call<SetScoreResponse>, response: Response<SetScoreResponse>) {
+                if (response.isSuccessful && response.body()?.success == true) {
+                    val updatedScore = response.body()?.data?.score
+                    val playerUpdated = response.body()?.data?.player
+                    Log.d("SetScore", "Score updated: Player $playerUpdated -> $updatedScore")
+                } else {
+                    Log.e("SetScore", "Failed to update score: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<SetScoreResponse>, t: Throwable) {
+                Log.e("SetScore", "Error: ${t.message}")
+            }
+        })
+    }
+
+    private fun sendServiceToServer(player: String) {
+        val apiService = ApiConfig.getApiService()
+        apiService.setService(slug, player).enqueue(object : Callback<SetServiceResponse> {
+            override fun onResponse(call: Call<SetServiceResponse>, response: Response<SetServiceResponse>) {
+                if (response.isSuccessful && response.body()?.success == true) {
+                    val updatedPlayer = response.body()?.data?.player
+                    Log.d("SetService", "Service updated to player: $updatedPlayer")
+                } else {
+                    Log.e("SetService", "Failed: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<SetServiceResponse>, t: Throwable) {
+                Log.e("SetService", "Error: ${t.message}")
+            }
+        })
+    }
+
+    private fun sendAdvantageToServer(player: String) {
+        val apiService = ApiConfig.getApiService()
+        apiService.setAdvantage(slug, player).enqueue(object : Callback<SetAdvantageResponse> {
+            override fun onResponse(call: Call<SetAdvantageResponse>, response: Response<SetAdvantageResponse>) {
+                if (response.isSuccessful && response.body()?.success == true) {
+                    val updatedPlayer = response.body()?.data?.player
+                    Log.d("SetService", "Service updated to player: $updatedPlayer")
+                } else {
+                    Log.e("SetService", "Failed: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<SetAdvantageResponse>, t: Throwable) {
+                Log.e("SetService", "Error: ${t.message}")
+            }
+        })
+    }
+
+
     private fun sendServiceToESP32(){
         val apiService = RetrofitClient.retrofit.create(ApiService::class.java)
         val call = apiService.updateService(serviceA,serviceB,advantageA,advantageB,reset)
@@ -674,6 +772,86 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+    private fun resetServiceToServer() {
+        val apiService = ApiConfig.getApiService()
+        apiService.resetService(slug).enqueue(object : Callback<SetServiceResetResponse> {
+            override fun onResponse(call: Call<SetServiceResetResponse>, response: Response<SetServiceResetResponse>) {
+                if (response.isSuccessful && response.body()?.success == true) {
+                    Log.d("ResetService", "Service reset successfully")
+                } else {
+                    Log.e("ResetService", "Failed: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<SetServiceResetResponse>, t: Throwable) {
+                Log.e("ResetService", "Error: ${t.message}")
+            }
+        })
+    }
+
+    private fun resetAdvantageToServer() {
+        val apiService = ApiConfig.getApiService()
+        apiService.resetAdvantage(slug).enqueue(object : Callback<SetAdvantageResetResponse> {
+            override fun onResponse(call: Call<SetAdvantageResetResponse>, response: Response<SetAdvantageResetResponse>) {
+                if (response.isSuccessful && response.body()?.success == true) {
+                    Log.d("ResetService", "Service reset successfully")
+                } else {
+                    Log.e("ResetService", "Failed: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<SetAdvantageResetResponse>, t: Throwable) {
+                Log.e("ResetService", "Error: ${t.message}")
+            }
+        })
+    }
+
+    private fun sendSetScoreToServer(player: String, setNumber: Int, score: Int) {
+        val apiService = ApiConfig.getApiService()
+        apiService.updateSetScore(slug, player, setNumber, score)
+            .enqueue(object : Callback<UpdateSetScoreResponse> {
+                override fun onResponse(
+                    call: Call<UpdateSetScoreResponse>,
+                    response: Response<UpdateSetScoreResponse>
+                ) {
+                    if (response.isSuccessful && response.body()?.success == true) {
+                        Log.d("SetScore", "Updated: ${response.body()?.message}")
+                    } else {
+                        Log.e("SetScore", "Failed: ${response.errorBody()?.string()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateSetScoreResponse>, t: Throwable) {
+                    Log.e("SetScore", "Error: ${t.message}")
+                }
+            })
+    }
+
+    // Tambahkan fungsi untuk melakukan reset ke server
+    private fun resetToServer() {
+        ApiConfig.getApiService().resetGame(slug)
+            .enqueue(object : Callback<ResetGameResponse> {
+                override fun onResponse(
+                    call: Call<ResetGameResponse>,
+                    response: Response<ResetGameResponse>
+                ) {
+                    if (response.isSuccessful && response.body()?.success == true) {
+                        Toast.makeText(this@MainActivity, "Game berhasil di-reset", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@MainActivity, "Gagal reset game di server", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResetGameResponse>, t: Throwable) {
+                    Toast.makeText(this@MainActivity, "Error: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+
+
+
 
 
 }
