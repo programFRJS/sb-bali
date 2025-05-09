@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.baliproject.scoreboardtennis.API.ApiConfig
 import com.baliproject.scoreboardtennis.API.ApiService
 import com.baliproject.scoreboardtennis.API.ResetGame.ResetGameResponse
@@ -23,7 +24,10 @@ import com.baliproject.scoreboardtennis.API.SetAdvantage.SetAdvantageResponse
 import com.baliproject.scoreboardtennis.API.SetService.SetServiceResetResponse
 import com.baliproject.scoreboardtennis.API.SetService.SetServiceResponse
 import com.baliproject.scoreboardtennis.API.UpdateSetScore.UpdateSetScoreResponse
+import com.baliproject.scoreboardtennis.Database.AppDatabase
+import com.baliproject.scoreboardtennis.Entity.MatchEntity
 import com.baliproject.scoreboardtennis.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,7 +36,6 @@ class MainActivity : AppCompatActivity() {
 
     private var scoreA = 0
     private var scoreB = 0
-    private var persen = 100
     private var Set = 1
     private var set1A = 0
     private var set1B = 0
@@ -49,6 +52,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var slug: String
     private lateinit var binding: ActivityMainBinding
 
+    private var playerA1: String? = null
+    private var playerA2: String? = null
+    private var playerB1: String? = null
+    private var playerB2: String? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,27 +65,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Inisialisasi Retrofit dengan IP dari Room
-//        lifecycleScope.launch {
-//            RetrofitClient.init(this@MainActivity)
-//        }
-
-        val playerA1 = intent.getStringExtra("playerA1")
-        val playerA2 = intent.getStringExtra("playerA2")
-        val playerB1 = intent.getStringExtra("playerB1")
-        val playerB2 = intent.getStringExtra("playerB2")
-
-        if(Set == 1) {
-            binding.tvGamePointOneA.setTextColor(ContextCompat.getColor(this, R.color.green))
-            binding.tvGamePointOneB.setTextColor(ContextCompat.getColor(this, R.color.green))
-        }
-        if(Set == 2){
-            binding.tvGamePointTwoA.setTextColor(ContextCompat.getColor(this, R.color.green))
-            binding.tvGamePointTwoB.setTextColor(ContextCompat.getColor(this, R.color.green))
-        }
-        if(Set == 3){
-            binding.tvGamePointThreeA.setTextColor(ContextCompat.getColor(this, R.color.green))
-            binding.tvGamePointThreeB.setTextColor(ContextCompat.getColor(this, R.color.green))
-        }
 
 
 
@@ -90,10 +78,144 @@ class MainActivity : AppCompatActivity() {
         val date = sharedPref.getString("date", "")
         slug = intent.getStringExtra("slug") ?: ""
 
+        scoreA = intent.getIntExtra("scoreA", 0)
+        scoreB = intent.getIntExtra("scoreB", 0)
+        Set = intent.getIntExtra("Set", 1)
+        set1A = intent.getIntExtra("set1A", 0)
+        set1B = intent.getIntExtra("set1B", 0)
+        set2A = intent.getIntExtra("set2A", 0)
+        set2B = intent.getIntExtra("set2B", 0)
+        set3A = intent.getIntExtra("set3A", 0)
+        set3B = intent.getIntExtra("set3B", 0)
+        serviceA = intent.getIntExtra("serviceA", 0)
+        serviceB = intent.getIntExtra("serviceB", 0)
+        advantageA = intent.getIntExtra("advantageA", 0)
+        advantageB = intent.getIntExtra("advantageB", 0)
+
+        playerA1 = intent.getStringExtra("playerA1") ?: "Player A1"
+        playerA2 = intent.getStringExtra("playerA2") ?: "Player A2"
+        playerB1 = intent.getStringExtra("playerB1") ?: "Player B1"
+        playerB2 = intent.getStringExtra("playerB2") ?: "Player B2"
+
+        val loadEvent = intent.getStringExtra("event") ?: ""
+        val loadCourt = intent.getStringExtra("court") ?: ""
+        val loadDate = intent.getStringExtra("date") ?: ""
+        val loadSlug = intent.getStringExtra("slug") ?: ""
+
+        txtEvent.text = loadEvent
+        txtCourt.text = loadCourt
+        txtTanggal.text = loadDate
+        binding.tvPlayerA1.text = playerA1
+        binding.tvPlayerA2.text = playerA2
+        binding.tvPlayerB1.text = playerB1
+        binding.tvPlayerB2.text = playerB2
+        binding.tvSkorA.text = scoreA.toString()
+        binding.tvSkorB.text = scoreB.toString()
+        binding.tvGamePointOneA.text = set1A.toString()
+        binding.tvGamePointOneB.text = set1B.toString()
+        binding. tvGamePointTwoA.text = set2A.toString()
+        binding.tvGamePointTwoB.text = set2B.toString()
+        binding. tvGamePointThreeA.text = set3A.toString()
+        binding.tvGamePointThreeB.text = set3B.toString()
+
+        when {
+            serviceA == 1 -> {
+                val drawable = ContextCompat.getDrawable(this, R.drawable.tennis_ball)
+                drawable?.setBounds(0, 0, dpToPx(30), dpToPx(30)) // Ukuran 30dp
+
+                val span = SpannableString(" ")
+                drawable?.let {
+                    val imageSpan = ImageSpan(it, ImageSpan.ALIGN_BOTTOM)
+                    span.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+
+                binding.tvServiceA.text = span
+            }
+            advantageA == 1 -> {
+                binding.tvServiceA.text = "AD"
+            }
+            else -> {
+                binding.tvServiceA.text = "" // Kosongkan jika tidak ada service/advantage
+            }
+        }
+
+
+
+        when {
+            serviceB == 1 -> {
+                val drawable = ContextCompat.getDrawable(this, R.drawable.tennis_ball)
+                drawable?.setBounds(0, 0, dpToPx(30), dpToPx(30)) // Ukuran 30dp
+
+                val span = SpannableString(" ")
+                drawable?.let {
+                    val imageSpan = ImageSpan(it, ImageSpan.ALIGN_BOTTOM)
+                    span.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+
+                binding.tvServiceB.text = span
+            }
+            advantageB == 1 -> {
+                binding.tvServiceB.text = "AD"
+            }
+            else -> {
+                binding.tvServiceB.text = "" // Kosongkan jika tidak ada service/advantage
+            }
+        }
+
+        if (Set == 1) {
+            binding.tvGamePointOneA.setTextColor(ContextCompat.getColor(this, R.color.green))
+            binding.tvGamePointOneB.setTextColor(ContextCompat.getColor(this, R.color.green))
+        }
+        if (Set == 2) {
+            binding.tvGamePointTwoA.setTextColor(ContextCompat.getColor(this, R.color.green))
+            binding.tvGamePointTwoB.setTextColor(ContextCompat.getColor(this, R.color.green))
+        }
+        if (Set == 3) {
+            binding.tvGamePointThreeA.setTextColor(ContextCompat.getColor(this, R.color.green))
+            binding.tvGamePointThreeB.setTextColor(ContextCompat.getColor(this, R.color.green))
+        }
+
+
+
         txtEvent.text = "$eventName"
 //        txtEvent.isSelected = true
         txtCourt.text = "Court: $court"
         txtTanggal.text = "$date"
+
+        binding.buttonSaveMatch.setOnClickListener {
+            val db = AppDatabase.getDatabase(this)
+            val matchDao = db.matchDao()
+
+// Anda harus menjalankan Room di coroutine:
+            lifecycleScope.launch {
+                val match = MatchEntity(
+                    slug = slug,
+                    playerA1 = playerA1,
+                    playerA2 = playerA2,
+                    playerB1 = playerB1,
+                    playerB2 = playerB2,
+                    eventName = eventName,
+                    court = court,
+                    date = date,
+                    scoreA = scoreA,
+                    scoreB = scoreB,
+                    setNumber = Set,
+                    set1A = set1A,
+                    set1B = set1B,
+                    set2A = set2A,
+                    set2B = set2B,
+                    set3A = set3A,
+                    set3B = set3B,
+                    serviceA = serviceA,
+                    serviceB = serviceB,
+                    advantageA = advantageA,
+                    advantageB = advantageB
+                )
+                matchDao.insertMatch(match)
+                Toast.makeText(this@MainActivity, "Match saved to database!", Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
         binding.buttonToSetting.setOnClickListener {
             val intent = Intent(this, SettingActivity::class.java)
@@ -519,10 +641,10 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
-            val playerA1 = data.getStringExtra("playerA1")
-            val playerA2 = data.getStringExtra("playerA2")
-            val playerB1 = data.getStringExtra("playerB1")
-            val playerB2 = data.getStringExtra("playerB2")
+            playerA1 = data.getStringExtra("playerA1")
+            playerA2 = data.getStringExtra("playerA2")
+            playerB1 = data.getStringExtra("playerB1")
+            playerB2 = data.getStringExtra("playerB2")
 
             binding.tvPlayerA1.text = formatPlayerNameA1(playerA1)
             binding.tvPlayerA2.text = formatPlayerNameA2(playerA2)
@@ -530,6 +652,7 @@ class MainActivity : AppCompatActivity() {
             binding.tvPlayerB2.text = formatPlayerNameB2(playerB2)
         }
     }
+
 
     private fun changeButtonOpacity(button: ImageButton) {
         button.alpha = 0.5f  // Mengatur opacity menjadi 50%
@@ -570,29 +693,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendBrightnessToESP32(){
-        val apiService = RetrofitClient.retrofit.create(ApiService::class.java)
-        val call = apiService.updateBrigthness(persen)
 
-        call.enqueue(object : Callback<ResponseData> {
-            override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
-                if (response.isSuccessful) {
-
-                    val status = response.body()?.status
-
-                    Log.d("Retrofit", "Response: $status")
-                } else {
-                    Toast.makeText(this@MainActivity, "Failed to update brightness: ${response.message()}", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseData>, t: Throwable) {
-
-                Log.e("Network Error", "Error: ${t.message}")
-                Toast.makeText(this@MainActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
 
     private fun sendResetToESP32(){
         val apiService = RetrofitClient.retrofit.create(ApiService::class.java)
@@ -648,9 +749,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendScoresToESP32() {
         val apiService1 = RetrofitClient.retrofit.create(ApiService::class.java)
-//        val apiService2 = RetrofitClient.retrofit2.create(ApiService::class.java)
         val call1 = apiService1.updateScores(scoreA,scoreB,reset)
-//        val call2 = apiService2.updateScores(scoreA, scoreB)
 
         call1.enqueue(object : Callback<ResponseData> {
             override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
@@ -671,24 +770,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-//        call2.enqueue(object : Callback<ResponseData> {
-//            override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
-//                if (response.isSuccessful) {
-//
-//                    val status = response.body()?.status
-//
-//                    Log.d("Retrofit", "Response: $status")
-//                } else {
-//                    Toast.makeText(this@MainActivity, "Failed to update scores: ${response.message()}", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ResponseData>, t: Throwable) {
-//
-//                Log.e("Network Error", "Error: ${t.message}")
-//                Toast.makeText(this@MainActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
-//            }
-//        })
+
 
     }
 

@@ -34,6 +34,7 @@
         <activity
             android:name=".UI.Activity.TimActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".UI.Activity.MainActivity"

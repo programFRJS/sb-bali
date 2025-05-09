@@ -8,6 +8,18 @@
     android:background="@color/white"
     tools:context=".UI.Activity.TimActivity">
 
+    <ImageView
+        android:id="@+id/playerImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/playertennis"
+        android:scaleType="centerCrop"
+        android:contentDescription="Background image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/scanAppBarLayout"
         android:layout_width="match_parent"
@@ -29,127 +41,149 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <!-- Player A1 -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputPlayerA1"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <!-- BEGIN SCROLLABLE FORM -->
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Player A1"
-        app:startIconDrawable="@drawable/baseline_account_circle_24"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        app:boxCornerRadiusBottomEnd="20dp"
-        android:layout_marginTop="100dp"
-        app:boxCornerRadiusBottomStart="20dp"
-        app:boxCornerRadiusTopEnd="20dp"
-        app:boxCornerRadiusTopStart="20dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/scanAppBarLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/inputPlayerB1">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/playerA1_EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textColor="@android:color/black"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- Player B1 -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputPlayerB1"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Player B1"
-        app:startIconDrawable="@drawable/baseline_account_circle_24"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        app:boxCornerRadiusBottomEnd="20dp"
-        app:boxCornerRadiusBottomStart="20dp"
-        android:layout_marginTop="100dp"
-        app:boxCornerRadiusTopEnd="20dp"
-        app:boxCornerRadiusTopStart="20dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/inputPlayerA1"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/playerB1_EditText"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textColor="@android:color/black"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content">
 
-    <!-- Player A2 -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputPlayerA2"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Player A2"
-        app:startIconDrawable="@drawable/baseline_account_circle_24"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        app:boxCornerRadiusBottomEnd="20dp"
-        app:boxCornerRadiusBottomStart="20dp"
-        app:boxCornerRadiusTopEnd="20dp"
-        app:boxCornerRadiusTopStart="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/inputPlayerA1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/inputPlayerB2">
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.6" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/playerA2_EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textColor="@android:color/black"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            <!-- Player A1 -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputPlayerA1"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Player A1"
+                app:startIconDrawable="@drawable/baseline_account_circle_24"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="24dp"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline">
 
-    <!-- Player B2 -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputPlayerB2"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Player B2"
-        app:startIconDrawable="@drawable/baseline_account_circle_24"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="10dp"
-        app:boxCornerRadiusBottomEnd="20dp"
-        app:boxCornerRadiusBottomStart="20dp"
-        app:boxCornerRadiusTopEnd="20dp"
-        app:boxCornerRadiusTopStart="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/inputPlayerB1"
-        app:layout_constraintStart_toEndOf="@+id/inputPlayerA2"
-        app:layout_constraintEnd_toEndOf="parent">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/playerA1_EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textColor="@android:color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/playerB2_EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textColor="@android:color/black"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            <!-- Player A2 -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputPlayerA2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Player A2"
+                app:startIconDrawable="@drawable/baseline_account_circle_24"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="12dp"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:layout_constraintTop_toBottomOf="@id/inputPlayerA1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline">
 
-    <!-- Submit Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonSubmitTim"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="SUBMIT"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:textSize="14sp"
-        android:layout_marginTop="20dp"
-        app:cornerRadius="20dp"
-        android:textStyle="bold"
-        android:backgroundTint="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/inputPlayerB2"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/playerA2_EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textColor="@android:color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Player B1 -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputPlayerB1"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Player B1"
+                app:startIconDrawable="@drawable/baseline_account_circle_24"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="12dp"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:layout_constraintTop_toBottomOf="@id/inputPlayerA2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/playerB1_EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textColor="@android:color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Player B2 -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputPlayerB2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Player B2"
+                app:startIconDrawable="@drawable/baseline_account_circle_24"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="12dp"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:layout_constraintTop_toBottomOf="@id/inputPlayerB1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/playerB2_EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textColor="@android:color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Submit Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSubmitTim"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:text="SUBMIT"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:textSize="14sp"
+                app:cornerRadius="20dp"
+                android:textStyle="bold"
+                android:backgroundTint="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/inputPlayerB2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+    <!-- END SCROLLABLE FORM -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

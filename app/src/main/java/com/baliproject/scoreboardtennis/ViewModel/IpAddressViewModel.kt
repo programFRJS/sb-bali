@@ -17,10 +17,7 @@ class IpAddressViewModel(application: Application) : AndroidViewModel(applicatio
         repository = IpAddressRepository(dao)
     }
 
-    fun saveIpAddress(ip: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val ipEntity = IpAddressEntity(ipAddress = ip)
-            repository.insert(ipEntity)
-        }
+    suspend fun saveIpAddressBlocking(ip: String) {
+        repository.insertBlocking(ip)
     }
 }

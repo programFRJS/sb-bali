@@ -778,6 +778,53 @@
                 android:src="@drawable/baseline_brightness_low_24" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonSaveMatch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:layout_columnSpan="5"
+            android:background="@drawable/button_selector_blue"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save Match"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <!-- Tombol Load Match (kolom ke-6, baris 2) -->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/buttonLoadMatch"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:gravity="center"-->
+<!--            android:clickable="true"-->
+<!--            android:layout_columnSpan="2"-->
+<!--            android:background="@drawable/button_selector_red"-->
+<!--            android:layout_columnWeight="1"-->
+<!--            android:layout_rowWeight="1"-->
+<!--            android:focusable="true">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Load Match"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="20sp"-->
+<!--                android:gravity="center" />-->
+<!--        </LinearLayout>-->
         <!--        <TextView android:text="20" android:gravity="center" android:layout_width="0dp" android:layout_height="0dp" android:layout_columnWeight="1" android:layout_rowWeight="1" android:background="#DDD" />-->
     </GridLayout>
     </LinearLayout>

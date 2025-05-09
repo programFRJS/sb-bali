@@ -5,11 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.baliproject.scoreboardtennis.Dao.IpAddressDao
+import com.baliproject.scoreboardtennis.Dao.MatchDao
+import com.baliproject.scoreboardtennis.Dao.WifiDao
 import com.baliproject.scoreboardtennis.Entity.IpAddressEntity
+import com.baliproject.scoreboardtennis.Entity.MatchEntity
+import com.baliproject.scoreboardtennis.Entity.WifiEntity
 
-@Database(entities = [IpAddressEntity::class], version = 1)
+@Database(entities = [IpAddressEntity::class, WifiEntity::class, MatchEntity::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ipAddressDao(): IpAddressDao
+    abstract fun wifiDao(): WifiDao
+    abstract fun matchDao(): MatchDao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null
@@ -20,7 +26,11 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
-                ).build().also { instance = it }
+                )
+                    .fallbackToDestructiveMigration()
+                    .build().also { instance = it }
             }
     }
 }
+
+

@@ -2,6 +2,7 @@ package com.baliproject.scoreboardtennis.Dao
 
 import androidx.room.*
 import com.baliproject.scoreboardtennis.Entity.IpAddressEntity
+import com.baliproject.scoreboardtennis.Entity.WifiEntity
 
 @Dao
 interface IpAddressDao {
