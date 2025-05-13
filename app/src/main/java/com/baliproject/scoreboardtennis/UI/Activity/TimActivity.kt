@@ -16,6 +16,7 @@ import com.baliproject.scoreboardtennis.API.ApiService
 import com.baliproject.scoreboardtennis.API.ResponseData
 import com.baliproject.scoreboardtennis.R
 import com.baliproject.scoreboardtennis.API.RetrofitClient
+import com.baliproject.scoreboardtennis.Utils.AlphanumericDotCommaFilter
 import com.baliproject.scoreboardtennis.databinding.ActivityTimBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
@@ -43,10 +44,11 @@ class TimActivity : AppCompatActivity() {
         setPlayerInputWatcher(binding.playerB2EditText)
 
         val maxLengthFilter = InputFilter.LengthFilter(11)
-        binding.playerA1EditText.filters = arrayOf(maxLengthFilter)
-        binding.playerB1EditText.filters = arrayOf(maxLengthFilter)
-        binding.playerA2EditText.filters = arrayOf(maxLengthFilter)
-        binding.playerB2EditText.filters = arrayOf(maxLengthFilter)
+        val charFilter = AlphanumericDotCommaFilter()
+        binding.playerA1EditText.filters = arrayOf(maxLengthFilter, charFilter)
+        binding.playerB1EditText.filters = arrayOf(maxLengthFilter, charFilter)
+        binding.playerA2EditText.filters = arrayOf(maxLengthFilter, charFilter)
+        binding.playerB2EditText.filters = arrayOf(maxLengthFilter, charFilter)
 
         binding.buttonSubmitTim.setOnClickListener {
             val playerA1 = binding.playerA1EditText.text.toString()
@@ -80,10 +82,10 @@ class TimActivity : AppCompatActivity() {
                         .enqueue(object : Callback<SetPlayerResponse> {
                             override fun onResponse(call: Call<SetPlayerResponse>, response: Response<SetPlayerResponse>) {
                                 if (response.isSuccessful && response.body()?.success == true) {
-                                    Toast.makeText(this@TimActivity, "Nama pemain berhasil disimpan", Toast.LENGTH_SHORT).show()
+//                                    Toast.makeText(this@TimActivity, "Nama pemain berhasil disimpan", Toast.LENGTH_SHORT).show()
                                     finish()
                                 } else {
-                                    Toast.makeText(this@TimActivity, "Gagal simpan: ${response.body()?.message ?: "Unknown error"}", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@TimActivity, "Failed: ${response.body()?.message ?: "Unknown error"}", Toast.LENGTH_SHORT).show()
                                 }
                             }
 
@@ -178,13 +180,13 @@ class TimActivity : AppCompatActivity() {
                     val status = response.body()?.status
                     Log.d("Retrofit", "Response: $status")
                 } else {
-                    Toast.makeText(this@TimActivity, "Failed to enter players: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@TimActivity, "Failed to input players: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
                 Log.e("Network Error", "Error: ${t.message}")
-                Toast.makeText(this@TimActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@TimActivity, "Not connected to scoreboard", Toast.LENGTH_SHORT).show()
             }
         })
     }

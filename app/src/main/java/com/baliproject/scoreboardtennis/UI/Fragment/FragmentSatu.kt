@@ -79,10 +79,10 @@ class FragmentSatu : Fragment() {
                         Toast.makeText(requireContext(), "IP & WiFi saved", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(requireContext(), "IP belum disimpan", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "IP not saved", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(requireContext(), "WiFi/password tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "WiFi/password cannot be blank", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -170,13 +170,13 @@ class FragmentSatu : Fragment() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 requireActivity().runOnUiThread {
-                    Toast.makeText(requireContext(), "Gagal mengirim data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to send wifi", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onResponse(call: Call, response: Response) {
                 requireActivity().runOnUiThread {
-                    Toast.makeText(requireContext(), "WiFi dikirim ke ESP32", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Successfully send wifi to scoreboard", Toast.LENGTH_SHORT).show()
                 }
             }
         })

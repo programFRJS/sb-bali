@@ -1,5 +1,6 @@
 package com.baliproject.scoreboardtennis.UI.Activity
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
@@ -139,97 +140,107 @@ class StartEventActivity : AppCompatActivity() {
 
         }
 
+        binding.buttonToSetting.setOnClickListener {
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.buttonLoadMatch.setOnClickListener {
             val db = AppDatabase.getDatabase(this)
             lifecycleScope.launch {
                 val match = db.matchDao().getMatch()
                 if (match != null) {
-                    playerA1 = match.playerA1
-                    playerA2 = match.playerA2
-                    playerB1 = match.playerB1
-                    playerB2 = match.playerB2
-                    scoreA = match.scoreA
-                    scoreB = match.scoreB
-                    Set = match.setNumber
-                    set1A = match.set1A
-                    set1B = match.set1B
-                    set2A = match.set2A
-                    set2B = match.set2B
-                    set3A = match.set3A
-                    set3B = match.set3B
-                    serviceA = match.serviceA
-                    serviceB = match.serviceB
-                    advantageA = match.advantageA
-                    advantageB = match.advantageB
-                    slug = match.slug.toString()
+                    AlertDialog.Builder(this@StartEventActivity)
+                        .setTitle("Load Match")
+                        .setMessage("Sure to load match?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            // Isi dari tombol Yes
+                            playerA1 = match.playerA1
+                            playerA2 = match.playerA2
+                            playerB1 = match.playerB1
+                            playerB2 = match.playerB2
+                            scoreA = match.scoreA
+                            scoreB = match.scoreB
+                            Set = match.setNumber
+                            set1A = match.set1A
+                            set1B = match.set1B
+                            set2A = match.set2A
+                            set2B = match.set2B
+                            set3A = match.set3A
+                            set3B = match.set3B
+                            serviceA = match.serviceA
+                            serviceB = match.serviceB
+                            advantageA = match.advantageA
+                            advantageB = match.advantageB
+                            slug = match.slug.toString()
 
-                    // Kirim ke ESP32
-                    sendSetToESP32()
-                    sendScoresToESP32()
-                    sendServiceToESP32()
-                    sendScoreToServer('a'.toString(), scoreA)
-                    sendScoreToServer('b'.toString(), scoreB)
-                    if (serviceA == 1) {
-                        sendServiceToServer('a'.toString())
-                        resetAdvantageToServer()
-                    } else if (serviceB == 1) {
-                        sendServiceToServer('b'.toString())
-                        resetAdvantageToServer()
-                    } else if (advantageA == 1) {
-                        sendAdvantageToServer('a'.toString())
-                        resetServiceToServer()
-                    } else if (advantageB == 1) {
-                        sendAdvantageToServer('b'.toString())
-                        resetServiceToServer()
-                    }
-                    sendSetScoreToServer('a'.toString(), 1, set1A)
-                    sendSetScoreToServer('a'.toString(), 2, set2A)
-                    sendSetScoreToServer('a'.toString(), 3, set3A)
-                    sendSetScoreToServer('b'.toString(), 1, set1B)
-                    sendSetScoreToServer('b'.toString(), 2, set2B)
-                    sendSetScoreToServer('b'.toString(), 3, set3B)
-                    playerA1?.let { it1 -> playerA2?.let { it2 ->
-                        playerB1?.let { it3 ->
-                            playerB2?.let { it4 ->
-                                sendPlayerToESP32(it1,
-                                    it2, it3, it4
-                                )
+                            sendSetToESP32()
+                            sendScoresToESP32()
+                            sendServiceToESP32()
+                            sendScoreToServer("a", scoreA)
+                            sendScoreToServer("b", scoreB)
+
+                            if (serviceA == 1) {
+                                sendServiceToServer("a")
+                                resetAdvantageToServer()
+                            } else if (serviceB == 1) {
+                                sendServiceToServer("b")
+                                resetAdvantageToServer()
+                            } else if (advantageA == 1) {
+                                sendAdvantageToServer("a")
+                                resetServiceToServer()
+                            } else if (advantageB == 1) {
+                                sendAdvantageToServer("b")
+                                resetServiceToServer()
                             }
+
+                            sendSetScoreToServer("a", 1, set1A)
+                            sendSetScoreToServer("a", 2, set2A)
+                            sendSetScoreToServer("a", 3, set3A)
+                            sendSetScoreToServer("b", 1, set1B)
+                            sendSetScoreToServer("b", 2, set2B)
+                            sendSetScoreToServer("b", 3, set3B)
+
+                            playerA1?.let { it1 -> playerA2?.let { it2 ->
+                                playerB1?.let { it3 -> playerB2?.let { it4 ->
+                                    sendPlayerToESP32(it1, it2, it3, it4)
+                                }}
+                            }}
+
+                            val intent = Intent(this@StartEventActivity, MainActivity::class.java).apply {
+                                putExtra("scoreA", scoreA)
+                                putExtra("scoreB", scoreB)
+                                putExtra("Set", Set)
+                                putExtra("set1A", set1A)
+                                putExtra("set1B", set1B)
+                                putExtra("set2A", set2A)
+                                putExtra("set2B", set2B)
+                                putExtra("set3A", set3A)
+                                putExtra("set3B", set3B)
+                                putExtra("serviceA", serviceA)
+                                putExtra("serviceB", serviceB)
+                                putExtra("advantageA", advantageA)
+                                putExtra("advantageB", advantageB)
+                                putExtra("playerA1", match.playerA1)
+                                putExtra("playerA2", match.playerA2)
+                                putExtra("playerB1", match.playerB1)
+                                putExtra("playerB2", match.playerB2)
+                                putExtra("event", match.eventName)
+                                putExtra("court", match.court)
+                                putExtra("date", match.date)
+                                putExtra("slug", slug)
+                            }
+
+                            startActivity(intent)
                         }
-                    } }
-
-                    // Kirim ke MainActivity
-                    val intent = Intent(this@StartEventActivity, MainActivity::class.java).apply {
-                        putExtra("scoreA", scoreA)
-                        putExtra("scoreB", scoreB)
-                        putExtra("Set", Set)
-                        putExtra("set1A", set1A)
-                        putExtra("set1B", set1B)
-                        putExtra("set2A", set2A)
-                        putExtra("set2B", set2B)
-                        putExtra("set3A", set3A)
-                        putExtra("set3B", set3B)
-                        putExtra("serviceA", serviceA)
-                        putExtra("serviceB", serviceB)
-                        putExtra("advantageA", advantageA)
-                        putExtra("advantageB", advantageB)
-                        putExtra("playerA1", match.playerA1)
-                        putExtra("playerA2", match.playerA2)
-                        putExtra("playerB1", match.playerB1)
-                        putExtra("playerB2", match.playerB2)
-                        putExtra("event", match.eventName)
-                        putExtra("court", match.court)
-                        putExtra("date", match.date)
-                        putExtra("slug", slug)
-                    }
-
-                    startActivity(intent)
-
+                        .setNegativeButton("No", null)
+                        .show()
                 } else {
                     Toast.makeText(this@StartEventActivity, "No saved match found", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
 
 
     }
@@ -303,7 +314,7 @@ class StartEventActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
 
                 Log.e("Network Error", "Error: ${t.message}")
-                Toast.makeText(this@StartEventActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@StartEventActivity, "Not connected to scoreboard", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -327,7 +338,7 @@ class StartEventActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
 
                 Log.e("Network Error", "Error: ${t.message}")
-                Toast.makeText(this@StartEventActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@StartEventActivity, "Not connected to scoreboard", Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -411,7 +422,7 @@ class StartEventActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
 
                 Log.e("Network Error", "Error: ${t.message}")
-                Toast.makeText(this@StartEventActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@StartEventActivity, "Not connected to scoreboard", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -471,26 +482,7 @@ class StartEventActivity : AppCompatActivity() {
             })
     }
 
-    // Tambahkan fungsi untuk melakukan reset ke server
-    private fun resetToServer() {
-        ApiConfig.getApiService().resetGame(slug)
-            .enqueue(object : Callback<ResetGameResponse> {
-                override fun onResponse(
-                    call: Call<ResetGameResponse>,
-                    response: Response<ResetGameResponse>
-                ) {
-                    if (response.isSuccessful && response.body()?.success == true) {
-                        Toast.makeText(this@StartEventActivity, "Game berhasil di-reset", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this@StartEventActivity, "Gagal reset game di server", Toast.LENGTH_SHORT).show()
-                    }
-                }
 
-                override fun onFailure(call: Call<ResetGameResponse>, t: Throwable) {
-                    Toast.makeText(this@StartEventActivity, "Error: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
-                }
-            })
-    }
 
     private fun sendPlayerToESP32(playerA1: String, playerA2: String, playerB1: String, playerB2: String) {
         val apiService1 = RetrofitClient.retrofit.create(ApiService::class.java)
@@ -508,7 +500,7 @@ class StartEventActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
                 Log.e("Network Error", "Error: ${t.message}")
-                Toast.makeText(this@StartEventActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@StartEventActivity, "Not connected to scoreboard", Toast.LENGTH_SHORT).show()
             }
         })
     }

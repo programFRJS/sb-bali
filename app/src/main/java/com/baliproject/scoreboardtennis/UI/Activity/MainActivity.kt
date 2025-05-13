@@ -217,10 +217,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        binding.buttonToSetting.setOnClickListener {
-            val intent = Intent(this, SettingActivity::class.java)
-            startActivity(intent)
-        }
+
 
 
         binding.buttonSet.setOnClickListener{
@@ -714,7 +711,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
 
                 Log.e("Network Error", "Error: ${t.message}")
-                Toast.makeText(this@MainActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Not connected to scoreboard", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -742,7 +739,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
 
                 Log.e("Network Error", "Error: ${t.message}")
-                Toast.makeText(this@MainActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Not connected to scoreboard", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -766,7 +763,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
 
                 Log.e("Network Error", "Error: ${t.message}")
-                Toast.makeText(this@MainActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Not connected to scoreboard", Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -850,7 +847,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
 
                 Log.e("Network Error", "Error: ${t.message}")
-                Toast.makeText(this@MainActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Not connected to scoreboard", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -919,9 +916,9 @@ class MainActivity : AppCompatActivity() {
                     response: Response<ResetGameResponse>
                 ) {
                     if (response.isSuccessful && response.body()?.success == true) {
-                        Toast.makeText(this@MainActivity, "Game berhasil di-reset", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "Reset match successfully", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(this@MainActivity, "Gagal reset game di server", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "Fail to reset match", Toast.LENGTH_SHORT).show()
                     }
                 }
 

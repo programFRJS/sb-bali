@@ -16,26 +16,28 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".UI.Activity.SettingActivity"
+            android:name=".SplashScreen"
             android:screenOrientation="landscape"
-            android:exported="false" />
-
-        <activity
-            android:name=".UI.Activity.StartEventActivity"
-            android:exported="true"
-            android:screenOrientation="landscape">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".UI.Activity.SettingActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".UI.Activity.StartEventActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".UI.Activity.TimActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".UI.Activity.MainActivity"
             android:exported="false"

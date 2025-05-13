@@ -107,7 +107,7 @@ class FragmentDua : Fragment() {
 
             override fun onFailure(call: Call<ResponseData>, t: Throwable) {
                 Log.e("Network Error", "Error: ${t.message}")
-                Toast.makeText(requireContext(), "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Not connected to scoreboard", Toast.LENGTH_SHORT).show()
             }
         })
     }
