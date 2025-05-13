@@ -99,9 +99,9 @@ class FragmentDua : Fragment() {
             override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
                 if (response.isSuccessful) {
                     val status = response.body()?.status
-                    Log.d("Retrofit", "Response: $status")
+                    Log.d("BrightnessFragment", "Response: $status")
                 } else {
-                    Toast.makeText(requireContext(), "Failed to update brightness: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.e("BrightnessFragment", "Failed to update brightness: ${response.message()}")
                 }
             }
 

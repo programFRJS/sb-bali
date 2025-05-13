@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -218,7 +219,10 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
+        binding.buttonToSetting.setOnClickListener {
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.buttonSet.setOnClickListener{
             Set += 1
@@ -704,7 +708,8 @@ class MainActivity : AppCompatActivity() {
 
                     Log.d("Retrofit", "Response: $status")
                 } else {
-                    Toast.makeText(this@MainActivity, "Failed to reset: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.e("MainActivity", "Failed to reset: ${response.message()}")
+
                 }
             }
 
@@ -732,7 +737,8 @@ class MainActivity : AppCompatActivity() {
 
                     Log.d("Retrofit", "Response: $status")
                 } else {
-                    Toast.makeText(this@MainActivity, "Failed to update set: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.e("MainActivity", "Failed to update set: ${response.message()}")
+
                 }
             }
 
@@ -756,7 +762,8 @@ class MainActivity : AppCompatActivity() {
 
                     Log.d("Retrofit", "Response: $status")
                 } else {
-                    Toast.makeText(this@MainActivity, "Failed to update scores: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.e("MainActivity", "Failed to update scores: ${response.message()}")
+
                 }
             }
 
@@ -840,7 +847,8 @@ class MainActivity : AppCompatActivity() {
 
                     Log.d("Retrofit", "Response: $status")
                 } else {
-                    Toast.makeText(this@MainActivity, "Failed to update services: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.e("MainActivity", "Failed to update services: ${response.message()}")
+
                 }
             }
 
@@ -916,17 +924,34 @@ class MainActivity : AppCompatActivity() {
                     response: Response<ResetGameResponse>
                 ) {
                     if (response.isSuccessful && response.body()?.success == true) {
-                        Toast.makeText(this@MainActivity, "Reset match successfully", Toast.LENGTH_SHORT).show()
+                        Log.d("MainActivity", "Reset match successfully")
                     } else {
-                        Toast.makeText(this@MainActivity, "Fail to reset match", Toast.LENGTH_SHORT).show()
+                        Log.e("MainActivity", "Fail to reset match: ${response.body()?.message ?: "Unknown error"}")
                     }
                 }
 
                 override fun onFailure(call: Call<ResetGameResponse>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "Error: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    Log.e("MainActivity", "Error resetting match: ${t.localizedMessage}")
                 }
             })
     }
+
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setTitle("Exit Match")
+            .setMessage("Are you sure you want to exit the match?")
+            .setPositiveButton("Yes") { dialog, _ ->
+                dialog.dismiss()
+                super.onBackPressed() // atau finish() jika kamu ingin langsung tutup Activity
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+
 
 
 

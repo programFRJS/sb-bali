@@ -232,6 +232,7 @@ class StartEventActivity : AppCompatActivity() {
                             }
 
                             startActivity(intent)
+                            finish()
                         }
                         .setNegativeButton("No", null)
                         .show()
@@ -307,7 +308,8 @@ class StartEventActivity : AppCompatActivity() {
 
                     Log.d("Retrofit", "Response: $status")
                 } else {
-                    Toast.makeText(this@StartEventActivity, "Failed to update set: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.e("StartEventActivity", "Failed to update set: ${response.message()}")
+
                 }
             }
 
@@ -331,7 +333,7 @@ class StartEventActivity : AppCompatActivity() {
 
                     Log.d("Retrofit", "Response: $status")
                 } else {
-                    Toast.makeText(this@StartEventActivity, "Failed to update scores: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.e("StartEventActivity", "Failed to update scores: ${response.message()}")
                 }
             }
 
@@ -415,7 +417,7 @@ class StartEventActivity : AppCompatActivity() {
 
                     Log.d("Retrofit", "Response: $status")
                 } else {
-                    Toast.makeText(this@StartEventActivity, "Failed to update services: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.e("StartEventActivity", "Failed to update service: ${response.message()}")
                 }
             }
 
@@ -494,7 +496,7 @@ class StartEventActivity : AppCompatActivity() {
                     val status = response.body()?.status
                     Log.d("Retrofit", "Response: $status")
                 } else {
-                    Toast.makeText(this@StartEventActivity, "Failed to enter players: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.e("StartEventActivity", "Failed to update player: ${response.message()}")
                 }
             }
 

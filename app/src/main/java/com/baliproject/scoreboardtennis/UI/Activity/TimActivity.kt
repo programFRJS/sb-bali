@@ -85,19 +85,20 @@ class TimActivity : AppCompatActivity() {
 //                                    Toast.makeText(this@TimActivity, "Nama pemain berhasil disimpan", Toast.LENGTH_SHORT).show()
                                     finish()
                                 } else {
-                                    Toast.makeText(this@TimActivity, "Failed: ${response.body()?.message ?: "Unknown error"}", Toast.LENGTH_SHORT).show()
+                                    Log.e("TimActivity", "Failed: ${response.body()?.message ?: "Unknown error"}")
+
                                 }
                             }
 
                             override fun onFailure(call: Call<SetPlayerResponse>, t: Throwable) {
-                                Toast.makeText(this@TimActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                                Log.e("TimActivity", "Error: ${t.message}")
                             }
                         })
                 } else {
-                    Toast.makeText(this, "Slug tidak ditemukan", Toast.LENGTH_SHORT).show()
+                    Log.e("TimActivity", "Slug tidak ditemukan")
                 }
             } else {
-                Toast.makeText(this, "Input Player Not Valid", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Input Player cannot be blank", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -180,7 +181,7 @@ class TimActivity : AppCompatActivity() {
                     val status = response.body()?.status
                     Log.d("Retrofit", "Response: $status")
                 } else {
-                    Toast.makeText(this@TimActivity, "Failed to input players: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.e("TimActivity", "Failed to update player: ${response.message()}")
                 }
             }
 
