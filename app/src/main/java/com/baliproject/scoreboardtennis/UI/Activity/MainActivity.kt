@@ -6,6 +6,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ImageSpan
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -15,7 +16,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.baliproject.scoreboardtennis.API.ApiConfig
 import com.baliproject.scoreboardtennis.API.ApiService
+import com.baliproject.scoreboardtennis.API.MatchStatus.UpdateStatusResponse
 import com.baliproject.scoreboardtennis.API.ResetGame.ResetGameResponse
+import com.baliproject.scoreboardtennis.API.ResetGame.ResetStatusMatchResponse
 import com.baliproject.scoreboardtennis.API.ResponseData
 import com.baliproject.scoreboardtennis.R
 import com.baliproject.scoreboardtennis.API.RetrofitClient
@@ -50,7 +53,10 @@ class MainActivity : AppCompatActivity() {
     private var advantageB = 0
     private var reset = 0
     private var pressReset = 0
+    private var pressStatusMatchPoints = 0
+    private var pressStatusBreakPoints = 0
     private lateinit var slug: String
+    private lateinit var matchStatus: String
     private lateinit var binding: ActivityMainBinding
 
     private var playerA1: String? = null
@@ -65,8 +71,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inisialisasi Retrofit dengan IP dari Room
-
 
 
         val txtEvent = findViewById<TextView>(R.id.txt_event)
@@ -79,6 +83,17 @@ class MainActivity : AppCompatActivity() {
         val date = sharedPref.getString("date", "")
         slug = intent.getStringExtra("slug") ?: ""
 
+        matchStatus = intent.getStringExtra("matchStatus").toString()
+
+        if(matchStatus == "match-points"){
+            updateMatchStatusToServer("match-points")
+            binding.matchStatus.text = "MATCH POINTS"
+            binding.matchStatus.visibility = View.VISIBLE
+        } else if (matchStatus == "break-points") {
+            updateMatchStatusToServer("break-points")
+            binding.matchStatus.text = "BREAK POINTS"
+            binding.matchStatus.visibility = View.VISIBLE
+        }
         scoreA = intent.getIntExtra("scoreA", 0)
         scoreB = intent.getIntExtra("scoreB", 0)
         Set = intent.getIntExtra("Set", 1)
@@ -210,10 +225,11 @@ class MainActivity : AppCompatActivity() {
                     serviceA = serviceA,
                     serviceB = serviceB,
                     advantageA = advantageA,
-                    advantageB = advantageB
+                    advantageB = advantageB,
+                    matchStatus = matchStatus
                 )
                 matchDao.insertMatch(match)
-                Toast.makeText(this@MainActivity, "Match saved to database!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Save match successfully", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -634,8 +650,79 @@ class MainActivity : AppCompatActivity() {
                 binding.tvGamePointThreeB.text = set3B.toString()
                 sendResetToESP32()
                 resetToServer()
+                binding.matchStatus.visibility = View.GONE
             }
         }
+
+        binding.matchPointButton.setOnClickListener {
+            pressStatusMatchPoints++
+
+            if(pressStatusMatchPoints == 2) {
+                pressStatusMatchPoints = 0
+                binding.matchStatus.visibility = View.GONE
+                sendResetStatusMatchToServer()
+            } else {
+                matchStatus = "match-points"
+                updateMatchStatusToServer("match-points")
+                binding.matchStatus.text = "MATCH POINTS"
+                binding.matchStatus.visibility = View.VISIBLE
+            }
+        }
+
+        binding.breakPointButton.setOnClickListener {
+            pressStatusBreakPoints++
+
+            if(pressStatusBreakPoints == 2){
+                pressStatusBreakPoints = 0
+                binding.matchStatus.visibility = View.GONE
+                sendResetStatusMatchToServer()
+            } else {
+                matchStatus = "break-points"
+                updateMatchStatusToServer("break-points")
+                binding.matchStatus.text = "BREAK POINTS"
+                binding.matchStatus.visibility = View.VISIBLE
+            }
+        }
+
+    }
+
+    private fun updateMatchStatusToServer(status: String) {
+        val apiService = ApiConfig.getApiService()
+
+        apiService.updateMatchStatus(slug, status).enqueue(object : Callback<UpdateStatusResponse> {
+            override fun onResponse(call: Call<UpdateStatusResponse>, response: Response<UpdateStatusResponse>) {
+                if (response.isSuccessful && response.body()?.success == true) {
+                    val updateStatusMatch = response.body()?.data?.status
+                    Log.d("UpdateStatusMatch", "Status match updated: $updateStatusMatch")
+                } else {
+                    Log.e("UpdateStatusMatch", "Failed to update status match: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateStatusResponse>, t: Throwable) {
+                Log.e("UpdateStatusMatch", "Error: ${t.message}")
+            }
+        })
+    }
+
+    private fun sendResetStatusMatchToServer() {
+        ApiConfig.getApiService().resetMatchStatus(slug)
+            .enqueue(object : Callback<ResetStatusMatchResponse> {
+                override fun onResponse(
+                    call: Call<ResetStatusMatchResponse>,
+                    response: Response<ResetStatusMatchResponse>
+                ) {
+                    if (response.isSuccessful && response.body()?.success == true) {
+                        Log.d("MainActivity", "Reset match status successfully")
+                    } else {
+                        Log.e("MainActivity", "Fail to reset match status: ${response.body()?.message ?: "Unknown error"}")
+                    }
+                }
+
+                override fun onFailure(call: Call<ResetStatusMatchResponse>, t: Throwable) {
+                    Log.e("MainActivity", "Error resetting match: ${t.localizedMessage}")
+                }
+            })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -751,10 +838,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendScoresToESP32() {
-        val apiService1 = RetrofitClient.retrofit.create(ApiService::class.java)
-        val call1 = apiService1.updateScores(scoreA,scoreB,reset)
+        val apiService = RetrofitClient.retrofit.create(ApiService::class.java)
+        val call = apiService.updateScores(scoreA,scoreB,reset)
 
-        call1.enqueue(object : Callback<ResponseData> {
+        call.enqueue(object : Callback<ResponseData> {
             override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
                 if (response.isSuccessful) {
 

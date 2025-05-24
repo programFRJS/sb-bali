@@ -11,7 +11,7 @@ import com.baliproject.scoreboardtennis.Entity.IpAddressEntity
 import com.baliproject.scoreboardtennis.Entity.MatchEntity
 import com.baliproject.scoreboardtennis.Entity.WifiEntity
 
-@Database(entities = [IpAddressEntity::class, WifiEntity::class, MatchEntity::class], version = 4)
+@Database(entities = [IpAddressEntity::class, WifiEntity::class, MatchEntity::class], version = 6)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun ipAddressDao(): IpAddressDao
     abstract fun wifiDao(): WifiDao

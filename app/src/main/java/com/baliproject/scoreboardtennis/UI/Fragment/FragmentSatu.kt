@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.baliproject.scoreboardtennis.API.RetrofitClient
 import com.baliproject.scoreboardtennis.API.RetrofitClientWifi
 import com.baliproject.scoreboardtennis.API.WifiCredentials
+import com.baliproject.scoreboardtennis.BuildConfig
 import com.baliproject.scoreboardtennis.R
 import com.baliproject.scoreboardtennis.ViewModel.IpAddressViewModel
 import com.baliproject.scoreboardtennis.ViewModel.WifiViewModel
@@ -131,7 +132,14 @@ class FragmentSatu : Fragment() {
         }
 
         val url = "http://$ip/reset_wifi"
-        val request = Request.Builder().url(url).get().build()
+        val token = BuildConfig.SCOREBOARD_TOKEN_API
+
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Authorization", "Bearer $token")
+            .get()
+            .build()
+
         val client = OkHttpClient()
 
         client.newCall(request).enqueue(object : Callback {
@@ -153,9 +161,10 @@ class FragmentSatu : Fragment() {
         })
     }
 
+
     private fun sendWiFiCredentials(ip: String, ssid: String, password: String) {
         val url = "http://$ip/wifi"
-        val client = OkHttpClient()
+        val token = BuildConfig.SCOREBOARD_TOKEN_API  // Pastikan token tersedia di build.gradle
 
         val formBody = FormBody.Builder()
             .add("ssid", ssid)
@@ -164,23 +173,31 @@ class FragmentSatu : Fragment() {
 
         val request = Request.Builder()
             .url(url)
+            .addHeader("Authorization", "Bearer $token")
             .post(formBody)
             .build()
+
+        val client = OkHttpClient()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 requireActivity().runOnUiThread {
-                    Toast.makeText(requireContext(), "Failed to send wifi", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Failed to send wifi: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onResponse(call: Call, response: Response) {
                 requireActivity().runOnUiThread {
-                    Toast.makeText(requireContext(), "Successfully send wifi to scoreboard", Toast.LENGTH_SHORT).show()
+                    if (response.isSuccessful) {
+                        Toast.makeText(requireContext(), "Successfully sent WiFi credentials", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "Failed: ${response.code}", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         })
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

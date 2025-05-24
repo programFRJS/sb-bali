@@ -1,5 +1,6 @@
 package com.baliproject.scoreboardtennis.API
 
+import com.baliproject.scoreboardtennis.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -7,8 +8,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
-    private const val BASE_URL = ""
-    private const val TOKEN = ""
+    private const val BASE_URL = BuildConfig.API_BASE_URL
+    private const val TOKEN = BuildConfig.API_TOKEN
 
     fun getApiService(): ApiService {
         val logging = HttpLoggingInterceptor().apply {

@@ -5,3 +5,9 @@ data class ResetGameResponse(
     val data: Any?,
     val message: String
 )
+
+data class ResetStatusMatchResponse(
+    val success: Boolean,
+    val data: Any?,
+    val message: String
+)

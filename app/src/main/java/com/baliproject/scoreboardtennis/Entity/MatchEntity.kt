@@ -27,7 +27,8 @@ data class MatchEntity(
     val serviceA: Int,
     val serviceB: Int,
     val advantageA: Int,
-    val advantageB: Int
+    val advantageB: Int,
+    val matchStatus: String?
 )
 
 

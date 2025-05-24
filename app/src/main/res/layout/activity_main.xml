@@ -49,6 +49,22 @@
         android:textColor="#FFFFFF"
         android:paddingBottom="8dp" />
 
+        <TextView
+            android:id="@+id/match_status"
+            android:layout_width="245dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textStyle="bold"
+            android:gravity="center"
+            android:background="@color/white"
+            android:textSize="25sp"
+            android:textColor="#000000"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone"
+            />
+
+
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -156,7 +172,8 @@
                 android:layout_height="match_parent"
                 android:text="0"
                 android:textStyle="bold"
-                android:textSize="25sp"
+                android:textSize="35sp"
+                android:fontFamily="@font/digital"
                 android:textColor="#e2c067"
                 android:gravity="center"
                 android:background="@drawable/cell_border" />
@@ -167,7 +184,8 @@
                 android:layout_height="match_parent"
                 android:text="0"
                 android:textStyle="bold"
-                android:textSize="25sp"
+                android:textSize="35sp"
+                android:fontFamily="@font/digital"
                 android:textColor="#FFFFFF"
                 android:gravity="center"
                 android:background="@drawable/cell_border" />
@@ -178,7 +196,8 @@
                 android:layout_height="match_parent"
                 android:text="0"
                 android:textStyle="bold"
-                android:textSize="25sp"
+                android:fontFamily="@font/digital"
+                android:textSize="35sp"
                 android:textColor="#FFFFFF"
                 android:gravity="center"
                 android:background="@drawable/cell_border" />
@@ -189,7 +208,8 @@
                 android:layout_height="match_parent"
                 android:text="0"
                 android:textStyle="bold"
-                android:textSize="25sp"
+                android:fontFamily="@font/digital"
+                android:textSize="35sp"
                 android:textColor="#FFFFFF"
                 android:gravity="center"
                 android:background="@drawable/cell_border" />
@@ -243,8 +263,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="0"
+                android:fontFamily="@font/digital"
                 android:textStyle="bold"
-                android:textSize="25sp"
+                android:textSize="35sp"
                 android:textColor="#e2c067"
                 android:gravity="center"
                 android:background="@drawable/cell_border" />
@@ -255,7 +276,8 @@
                 android:layout_height="match_parent"
                 android:text="0"
                 android:textStyle="bold"
-                android:textSize="25sp"
+                android:fontFamily="@font/digital"
+                android:textSize="35sp"
                 android:textColor="#FFFFFF"
                 android:gravity="center"
                 android:background="@drawable/cell_border" />
@@ -266,7 +288,8 @@
                 android:layout_height="match_parent"
                 android:text="0"
                 android:textStyle="bold"
-                android:textSize="25sp"
+                android:fontFamily="@font/digital"
+                android:textSize="35sp"
                 android:textColor="#FFFFFF"
                 android:gravity="center"
                 android:background="@drawable/cell_border" />
@@ -277,7 +300,8 @@
                 android:layout_height="match_parent"
                 android:text="0"
                 android:textStyle="bold"
-                android:textSize="25sp"
+                android:fontFamily="@font/digital"
+                android:textSize="35sp"
                 android:textColor="#FFFFFF"
                 android:gravity="center"
                 android:background="@drawable/cell_border" />
@@ -788,7 +812,7 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
-            android:layout_columnSpan="5"
+            android:layout_columnSpan="3"
             android:background="@drawable/button_selector_blue"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
@@ -804,30 +828,56 @@
                 android:gravity="center" />
         </LinearLayout>
 
-        <!-- Tombol Load Match (kolom ke-6, baris 2) -->
-<!--        <LinearLayout-->
-<!--            android:id="@+id/buttonLoadMatch"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical"-->
-<!--            android:gravity="center"-->
-<!--            android:clickable="true"-->
-<!--            android:layout_columnSpan="2"-->
-<!--            android:background="@drawable/button_selector_red"-->
-<!--            android:layout_columnWeight="1"-->
-<!--            android:layout_rowWeight="1"-->
-<!--            android:focusable="true">-->
+        <LinearLayout
+            android:id="@+id/matchPointButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:background="@drawable/button_selector"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:focusable="true">
 
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Load Match"-->
-<!--                android:textStyle="bold"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:textSize="20sp"-->
-<!--                android:gravity="center" />-->
-<!--        </LinearLayout>-->
-        <!--        <TextView android:text="20" android:gravity="center" android:layout_width="0dp" android:layout_height="0dp" android:layout_columnWeight="1" android:layout_rowWeight="1" android:background="#DDD" />-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MATCH POINTS"
+                android:textStyle="bold"
+                android:textColor="@color/yellow"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/breakPointButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:gravity="center"
+                android:text="BREAK POINTS"
+                android:textColor="@color/yellow"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
     </GridLayout>
     </LinearLayout>
 </ScrollView>

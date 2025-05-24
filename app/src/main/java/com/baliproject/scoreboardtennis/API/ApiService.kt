@@ -4,7 +4,9 @@ import SetPlayerRequest
 import SetPlayerResponse
 import com.baliproject.scoreboardtennis.API.CreateGame.CreateGameRequest
 import com.baliproject.scoreboardtennis.API.CreateGame.CreateGameResponse
+import com.baliproject.scoreboardtennis.API.MatchStatus.UpdateStatusResponse
 import com.baliproject.scoreboardtennis.API.ResetGame.ResetGameResponse
+import com.baliproject.scoreboardtennis.API.ResetGame.ResetStatusMatchResponse
 import com.baliproject.scoreboardtennis.API.Score.SetScoreResponse
 import com.baliproject.scoreboardtennis.API.SetAdvantage.SetAdvantageResetResponse
 import com.baliproject.scoreboardtennis.API.SetAdvantage.SetAdvantageResponse
@@ -146,5 +148,14 @@ interface ApiService {
         @Path("slug") slug: String
     ): Call<ResetGameResponse>
 
+    @POST("game/set-status/{slug}/{status}")
+    fun updateMatchStatus(
+        @Path("slug") slug: String,
+        @Path("status") status: String
+    ): Call<UpdateStatusResponse>
 
+    @POST("game/reset/{slug}")
+    fun resetMatchStatus(
+        @Path("slug") slug: String
+    ): Call<ResetStatusMatchResponse>
 }

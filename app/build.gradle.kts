@@ -1,3 +1,18 @@
+import java.util.Properties
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        load(file.inputStream())
+    }
+}
+
+val apiBaseUrl: String = localProperties["API_BASE_URL"] as String
+val apiToken: String = localProperties["API_TOKEN"] as String
+val apiBaseUrlScoreboard: String = localProperties["SCOREBOARD_BASE_URL_API"] as String
+val apiTokenScoreboard: String = localProperties["SCOREBOARD_TOKEN_API"] as String
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +22,7 @@ plugins {
 android {
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     namespace = "com.baliproject.scoreboardtennis"
     compileSdk = 35
@@ -17,7 +33,10 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
+        buildConfigField("String", "API_TOKEN", "\"$apiToken\"")
+        buildConfigField("String", "SCOREBOARD_BASE_URL_API", "\"$apiBaseUrlScoreboard\"")
+        buildConfigField("String", "SCOREBOARD_TOKEN_API", "\"$apiTokenScoreboard\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

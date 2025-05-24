@@ -12,7 +12,9 @@ import com.baliproject.scoreboardtennis.API.ApiConfig
 import com.baliproject.scoreboardtennis.API.ApiService
 import com.baliproject.scoreboardtennis.API.CreateGame.CreateGameRequest
 import com.baliproject.scoreboardtennis.API.CreateGame.CreateGameResponse
+import com.baliproject.scoreboardtennis.API.MatchStatus.UpdateStatusResponse
 import com.baliproject.scoreboardtennis.API.ResetGame.ResetGameResponse
+import com.baliproject.scoreboardtennis.API.ResetGame.ResetStatusMatchResponse
 import com.baliproject.scoreboardtennis.API.ResponseData
 import com.baliproject.scoreboardtennis.API.RetrofitClient
 import com.baliproject.scoreboardtennis.API.Score.SetScoreResponse
@@ -51,6 +53,7 @@ class StartEventActivity : AppCompatActivity() {
     private var advantageA = 0
     private var advantageB = 0
     private var reset = 0
+    private var matchStatus: String? = null
     private lateinit var slug: String
 
     private var playerA1: String? = null
@@ -172,6 +175,7 @@ class StartEventActivity : AppCompatActivity() {
                             serviceB = match.serviceB
                             advantageA = match.advantageA
                             advantageB = match.advantageB
+                            matchStatus = match.matchStatus
                             slug = match.slug.toString()
 
                             sendSetToESP32()
@@ -179,6 +183,8 @@ class StartEventActivity : AppCompatActivity() {
                             sendServiceToESP32()
                             sendScoreToServer("a", scoreA)
                             sendScoreToServer("b", scoreB)
+                            updateMatchStatusToServer("match-points")
+                            updateMatchStatusToServer("break-points")
 
                             if (serviceA == 1) {
                                 sendServiceToServer("a")
@@ -229,6 +235,7 @@ class StartEventActivity : AppCompatActivity() {
                                 putExtra("court", match.court)
                                 putExtra("date", match.date)
                                 putExtra("slug", slug)
+                                putExtra("matchStatus", matchStatus)
                             }
 
                             startActivity(intent)
@@ -294,6 +301,25 @@ class StartEventActivity : AppCompatActivity() {
         } catch (e: Exception) {
             ""
         }
+    }
+
+    private fun updateMatchStatusToServer(status: String) {
+        val apiService = ApiConfig.getApiService()
+
+        apiService.updateMatchStatus(slug, status).enqueue(object : Callback<UpdateStatusResponse> {
+            override fun onResponse(call: Call<UpdateStatusResponse>, response: Response<UpdateStatusResponse>) {
+                if (response.isSuccessful && response.body()?.success == true) {
+                    val updateStatusMatch = response.body()?.data?.status
+                    Log.d("UpdateStatusMatch", "Status match updated: $updateStatusMatch")
+                } else {
+                    Log.e("UpdateStatusMatch", "Failed to update status match: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateStatusResponse>, t: Throwable) {
+                Log.e("UpdateStatusMatch", "Error: ${t.message}")
+            }
+        })
     }
 
     private fun sendSetToESP32(){
