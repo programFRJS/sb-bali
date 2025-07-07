@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Warna saat tombol tidak bisa diklik -->
+    <item android:color="#BDBDBD" android:state_enabled="false" />
+    <!-- Warna saat tombol bisa diklik -->
+    <item android:color="#2196F3" /> <!-- Ganti ini dengan warna aktif kamu -->
+</selector>

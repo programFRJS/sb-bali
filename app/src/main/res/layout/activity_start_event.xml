@@ -24,7 +24,7 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:contentDescription="Logo"
-                android:src="@drawable/logo"
+                android:src="@drawable/revisi_logo"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -135,15 +135,16 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="6dp"
+                    android:backgroundTint="#2196F3"
                     android:text="Load Match"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:backgroundTint="#0000ff"
                     app:cornerRadius="20dp"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/buttonToSetting"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/buttonToSetting"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonToSetting"
@@ -153,7 +154,7 @@
                     android:text="Setting"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:backgroundTint="#0000ff"
+                    android:backgroundTint="#2196F3"
                     app:cornerRadius="20dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"

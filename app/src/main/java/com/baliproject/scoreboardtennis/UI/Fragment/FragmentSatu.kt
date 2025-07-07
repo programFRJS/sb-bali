@@ -2,6 +2,8 @@ package com.baliproject.scoreboardtennis.UI.Fragment
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -118,11 +120,33 @@ class FragmentSatu : Fragment() {
                 .show()
         }
 
+        // Tambahkan TextWatcher ke ssidWifiEditText dan passwordWifiEditText
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateButtonSaveIpState()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        binding.ssidWifiEditText.addTextChangedListener(textWatcher)
+        binding.passwordWifiEditText.addTextChangedListener(textWatcher)
+
+        updateButtonSaveIpState()
+
+
 
 
 
 
     }
+    private fun updateButtonSaveIpState() {
+        val ssid = binding.ssidWifiEditText.text.toString()
+        val password = binding.passwordWifiEditText.text.toString()
+        binding.buttonSaveIpAddress.isEnabled = ssid.isEmpty() && password.isEmpty()
+    }
+
+
 
     private fun resetWifiFromESP() {
         val ip = view?.findViewById<EditText>(R.id.ipAddressEditText)?.text.toString()
@@ -144,20 +168,24 @@ class FragmentSatu : Fragment() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                requireActivity().runOnUiThread {
+                activity?.runOnUiThread {
+                    if (!isAdded) return@runOnUiThread
                     Toast.makeText(requireContext(), "Failed to connect: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
+
             }
 
             override fun onResponse(call: Call, response: Response) {
-                requireActivity().runOnUiThread {
+                activity?.runOnUiThread {
+                    if (!isAdded) return@runOnUiThread
                     if (response.isSuccessful) {
-                        Toast.makeText(requireContext(), "WiFi reset successfully!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "WiFi Reset Successfully", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(requireContext(), "Failed: ${response.code}", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
+
         })
     }
 
@@ -181,13 +209,15 @@ class FragmentSatu : Fragment() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                requireActivity().runOnUiThread {
-                    Toast.makeText(requireContext(), "Failed to send wifi: ${e.message}", Toast.LENGTH_SHORT).show()
+                activity?.runOnUiThread {
+                    if (!isAdded) return@runOnUiThread
+                    Toast.makeText(requireContext(), "Failed to send WiFi: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onResponse(call: Call, response: Response) {
-                requireActivity().runOnUiThread {
+                activity?.runOnUiThread {
+                    if (!isAdded) return@runOnUiThread
                     if (response.isSuccessful) {
                         Toast.makeText(requireContext(), "Successfully sent WiFi credentials", Toast.LENGTH_SHORT).show()
                     } else {
@@ -195,6 +225,7 @@ class FragmentSatu : Fragment() {
                     }
                 }
             }
+
         })
     }
 
